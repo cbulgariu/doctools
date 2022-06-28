@@ -1,0 +1,1984 @@
+openapi: 3.0.0
+info:
+  title: MENU External Order API
+  version: 1.0.1
+  description: >-
+    <h1>Data Format</h1>
+    <p>The API is REST based. All the data is sent as JSON and <b>Content-Type</b> header for all requests must be set to <b>application/json</b>. Every response is contained by an envelope and has a predictable set of keys:</p>
+      
+        {
+            "code": 200,
+            "status": "OK",
+            "data": {
+                "*entity_name*": {
+                    "*attribute_name*": "*attribute_value*"
+                }
+            }
+        }
+    <h3>Notation</h3>    
+    <p>The <b>snake case</b> notatiotn is used for naming JSON resources and their attributes, e.g. `serving_times`, `price_level`, etc.</p>
+
+    <h3>Date and Time format</h3>    
+    <p>All dates and timestamps are represented according to <b>RFC-3339</b> standard with the extended notation (i.e. hyphen & dot separated) and UTC timezone. For example, `2020-11-05` is used for dates and `2020-11-05T18:35:52+01:00` for timestamps.</p>
+
+    <h3>Amount format</h3>    
+    <p>All prices and order related charges are represented in <b>minor currency units</b> (i.e. cents) as integer values. For example, 0.35 EUR will be represented as 35, 10 GBP as 1000, etc. Cuurencies that have no minor currency units (i.e. currency exponent is 0) like ISK or JPY also need to be represented with x100 factor applied, e.g. 10 JPY will be 1000, etc.</p>
+    
+    <h1>Authentication</h1>
+    <p>Two levels of client authentication are required - Aggregator Certification token and Venue Access token.</p><p><b>Certification token</b> level is used to authenticate the Aggregator and is implemented by sending Certification token as custom `X-Mt-Certification-Token` http header. There is one Certification token per Aggregator per environment (EU, LAC, US, etc.) and it's usage is mandatory for each External Order API request. If missing or invalid Certification token, http 401 (Unauthorized) error occurs.</p>
+      <p><b>Access token</b> level is used for single Venue authentication and is based on OAuth protocol. There is Client ID / Client secret pair for each venue. Aggregator sends Client ID and Client secret in Basic Authorization http header to request access token from MENU core OAuth service. If valid client credentials, a Venue related Access token is returned in the response. This access token must be sent for all External Order API requests in http Bearer Authorization http header. If missing or invalid Acess token, http 401 (Unauthorized) error occurs.</p> 
+
+
+    <h1>Localization and Translation</h1>
+    <p>The content in the response body should be translated to the language specified in <b>Accept-Language</b> http header of the client request. If the content is not available in the requested languages, default language should be used.</p>
+
+
+    <h1>Versioning</h1>
+    <p>Full API version is specified according to <b>semantic versioning schema</b> (e.g. 1.2.4, 2.10.1, etc.) and should be included in each request as custom `X-Mt-Api-Version` http header.</p>
+
+
+    <h1>Error Handling</h1>
+    <p>The API signals errors via standard HTTP status codes. This means that successful responses use a 2xx status code, while errors are reported with 4xx or 5xx codes.</p>
+    
+    
+    <h3>Standard HTTP Error Codes</h3>
+      Status Code | Status Message | Description |
+      -------------  | ------------- | -----------
+      400 | Bad Request | Request could not be understood by the server due to malformed syntax |
+      401 | Unauthorized | Client must authenticate itself to get the requested response |
+      403 | Forbidden | User might not have necessary permissions for the resource, or may need an account |
+      404 | Not Found | Requested resource could not be found but may be available in the future |
+      405 | Method Not Allowed | Request method is not supported for the requested resource |
+      415 | Unsupported Media Type | Request entity has a media type which the server or the resource does not support |
+      422 | Validation Error | Some of the required fields are missing from the request body |
+      426 | Upgrade Required | Client must update its application to the newest one |
+      429 | Too Many Requests | Too many requests sent in a given amount of time |
+      500 | Internal Server Error | An unexpected condition was encountered and a specific message is not suitable |
+      
+    <p>Along with standard http error code and related status message, response body can contain additional info about the error:</p>
+    
+        {
+            "status": "Error Status Message",
+            "code": <Error Status Code>,
+            "data": {
+                "info_message": {
+                    "title": "Error Info Message Title",
+                    "body": "Error Info Message Body "
+                }
+            }
+        }
+
+tags:
+  - name: OAuth
+  - name: Configuration
+  - name: Menus
+  - name: Orders
+  - name: Payments
+  - name: Webhooks
+  - name: Venue Info
+servers: 
+  - url: 'https://api-playground.menu.app/api/eoa'
+paths:
+
+  '/configuration':
+    parameters:
+      - $ref: '#/components/x-headers/accept'
+      - $ref: '#/components/x-headers/accept-language'      
+      - $ref: '#/components/x-headers/authorization-bearer'
+      - $ref: '#/components/x-headers/content-type'
+      - $ref: '#/components/x-headers/x-mt-certification-token'   
+      - $ref: '#/components/x-headers/x-mt-api-version'
+    get:
+      tags: 
+        - Configuration    
+      summary: Get Global Configuration
+      description: Get Configuration on Global level.
+      responses:
+        '200':
+          description: |
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: integer
+                    format: int132
+                  data:
+                    properties:
+                      configuration:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Configuration'
+          
+  '/oauth/tokens':
+    parameters:
+      - in: header
+        name: Authorization
+        required: true
+        schema:
+          type: string
+          default: Basic client_id:client_secret
+      - in: header
+        name: Content-Type
+        required: true
+        schema:
+          type: string
+          default: application/x-www-form-urlencoded
+
+    post:
+      summary: Get Access Token 
+      description: | 
+      tags: 
+        - OAuth
+      security:
+        - basicAuth: []        
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:  
+              properties:
+                grant_type:
+                  type: string
+                  default: client_credentials
+      responses:
+        '200':
+          description: |
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: integer
+                    format: int132
+                  data:
+                    properties:
+                      oauth_token:
+                        $ref: '#/components/schemas/OAuth.AccessToken'
+
+  '/info':                        
+    parameters: 
+      - $ref: '#/components/x-headers/accept'
+      - $ref: '#/components/x-headers/accept-language'      
+      - $ref: '#/components/x-headers/authorization-bearer'
+      - $ref: '#/components/x-headers/content-type'
+      - $ref: '#/components/x-headers/x-mt-certification-token'   
+      - $ref: '#/components/x-headers/x-mt-api-version'
+      - $ref: '#/components/x-headers/x-mt-business-unit-uuid'
+      - $ref: '#/components/x-headers/x-mt-business-unit-type'
+     
+    get:
+      tags: 
+        - Venue Info
+      summary: Fetch Venue info
+      description: Fetch information related to the active Venue.
+      responses:
+        '200':
+          description: |
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: integer
+                    format: int132
+                  data:
+                    properties:
+                      venue:
+                        $ref: '#/components/schemas/Venues.Venue'
+
+  '/venue-list':                        
+    parameters: 
+      - $ref: '#/components/x-headers/accept'
+      - $ref: '#/components/x-headers/accept-language'      
+      - $ref: '#/components/x-headers/authorization-bearer'
+      - $ref: '#/components/x-headers/content-type'
+      - $ref: '#/components/x-headers/x-mt-certification-token'   
+      - $ref: '#/components/x-headers/x-mt-api-version'
+     
+    get:
+      tags: 
+        - Venue Info
+      summary: Venue list
+      description: Fetch Venue List.
+      responses:
+        '200':
+          description: |
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: integer
+                    format: int132
+                  data:
+                    properties:
+                      venue_list:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Venues.VenueList'
+
+  '/menus':
+    parameters: 
+      - $ref: '#/components/x-headers/accept'
+      - $ref: '#/components/x-headers/accept-language'      
+      - $ref: '#/components/x-headers/authorization-bearer'
+      - $ref: '#/components/x-headers/content-type'
+      - $ref: '#/components/x-headers/x-mt-certification-token'   
+      - $ref: '#/components/x-headers/x-mt-api-version'
+      - $ref: '#/components/x-headers/x-mt-business-unit-uuid'
+      - $ref: '#/components/x-headers/x-mt-business-unit-type'
+    get:
+      tags: 
+        - Menus    
+      summary: Fetch all Venue Menus
+      description: Fetch all Menus from the active Venue.
+      responses:
+        '200':
+          description: |
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: integer
+                    format: int132
+                  data:
+                    properties:
+                      menus:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Menus.Menu'
+                        
+                        
+  '/menus/{menu_id}':
+    parameters: 
+      - $ref: '#/components/x-headers/accept'
+      - $ref: '#/components/x-headers/accept-language'      
+      - $ref: '#/components/x-headers/authorization-bearer'
+      - $ref: '#/components/x-headers/content-type'
+      - $ref: '#/components/x-headers/x-mt-certification-token'   
+      - $ref: '#/components/x-headers/x-mt-api-version'
+      - $ref: '#/components/x-headers/x-mt-business-unit-uuid'
+      - $ref: '#/components/x-headers/x-mt-business-unit-type'
+    get:
+      tags: 
+        - Menus
+      parameters:
+        - in: path
+          name: menu_id
+          required: true
+          schema:
+            type: integer  
+      summary: Fetch the Menu
+      description: Fetch the Menu from the active Venue.
+      responses:
+        '200':
+          description: |
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: integer
+                    format: int132
+                  data:
+                    properties:
+                      menu:
+                        $ref: '#/components/schemas/Menus.Menu.withCategories'
+                        
+  '/menus/{menu_id}/categories/{category_id}':
+    parameters: 
+      - $ref: '#/components/x-headers/accept'
+      - $ref: '#/components/x-headers/accept-language'      
+      - $ref: '#/components/x-headers/authorization-bearer'
+      - $ref: '#/components/x-headers/content-type'
+      - $ref: '#/components/x-headers/x-mt-certification-token'   
+      - $ref: '#/components/x-headers/x-mt-api-version'
+      - $ref: '#/components/x-headers/x-mt-business-unit-uuid'
+      - $ref: '#/components/x-headers/x-mt-business-unit-type'
+    get:
+      tags: 
+        - Menus
+      parameters:
+        - in: path
+          name: menu_id
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: category_id
+          required: true
+          schema:
+            type: integer    
+      summary: Fetch a Category
+      description: Fetch a Category with its Subcategories.
+      responses:
+        '200':
+          description: |
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: integer
+                    format: int132
+                  data:
+                    properties:
+                      category:
+                        $ref: '#/components/schemas/Menus.Category'
+                        
+  '/menus/{menu_id}/categories/{category_id}/subcategories/{subcategory_id}':
+    parameters: 
+      - $ref: '#/components/x-headers/accept'
+      - $ref: '#/components/x-headers/accept-language'      
+      - $ref: '#/components/x-headers/authorization-bearer'
+      - $ref: '#/components/x-headers/content-type'
+      - $ref: '#/components/x-headers/x-mt-certification-token'   
+      - $ref: '#/components/x-headers/x-mt-api-version'
+      - $ref: '#/components/x-headers/x-mt-business-unit-uuid'
+      - $ref: '#/components/x-headers/x-mt-business-unit-type'
+    get:
+      tags: 
+        - Menus
+      parameters:
+        - in: path
+          name: menu_id
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: category_id
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: subcategory_id
+          required: true
+          schema:
+            type: integer    
+      summary: Fetch a Subcategory
+      description: Fetch a Subcategory with its Items.
+      responses:
+        '200':
+          description: |
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: integer
+                    format: int132
+                  data:
+                    properties:
+                      subcategory:
+                        $ref: '#/components/schemas/Menus.Subcategory.withItems' 
+                        
+  '/menus/{menu_id}/categories/{category_id}/subcategories/{subcategory_id}/menu-items/{menu_item_id}/combo-meals':
+    parameters: 
+      - $ref: '#/components/x-headers/accept'
+      - $ref: '#/components/x-headers/accept-language'      
+      - $ref: '#/components/x-headers/authorization-bearer'
+      - $ref: '#/components/x-headers/content-type'
+      - $ref: '#/components/x-headers/x-mt-certification-token'   
+      - $ref: '#/components/x-headers/x-mt-api-version'
+      - $ref: '#/components/x-headers/x-mt-business-unit-uuid'
+      - $ref: '#/components/x-headers/x-mt-business-unit-type'
+    get:
+      tags: 
+        - Menus
+      parameters:
+        - in: path
+          name: menu_id
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: category_id
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: subcategory_id
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: menu_item_id
+          required: true
+          schema:
+            type: integer    
+      summary: Fetch Combo Meals for Menu Item
+      description: Fetch all Combo meals related to the given Menu Item.
+      responses:
+        '200':
+          description: |
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: integer
+                    format: int132
+                  data:
+                    properties:
+                      combo_meals:
+                        type: array
+                        items: 
+                          $ref: '#/components/schemas/Menus.ComboMeal'
+
+  '/orders':                        
+    parameters: 
+      - $ref: '#/components/x-headers/accept'
+      - $ref: '#/components/x-headers/accept-language'      
+      - $ref: '#/components/x-headers/authorization-bearer'
+      - $ref: '#/components/x-headers/content-type'
+      - $ref: '#/components/x-headers/x-mt-certification-token'
+      - $ref: '#/components/x-headers/x-mt-api-version'
+      - $ref: '#/components/x-headers/x-mt-business-unit-uuid'
+      - $ref: '#/components/x-headers/x-mt-business-unit-type'
+    get:
+      tags:
+        - Orders
+      summary: Get Orders
+      description: Get all Orders
+      responses:
+        '200':
+          description: |
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: integer
+                    format: int132
+                  data:
+                    properties:
+                      orders:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Orders.Order'
+    post:
+      tags: 
+        - Orders    
+      summary: Create Order
+      description: Create and Order in the active Venue.
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:  
+              $ref: '#/components/schemas/Orders.Request.Order'
+      responses:  
+        '200':
+          description: |
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: integer
+                    format: int132
+                  data:
+                    properties:
+                      order:
+                        $ref: '#/components/schemas/Orders.Order'
+
+  '/orders/calculate':                        
+    parameters: 
+      - $ref: '#/components/x-headers/accept'
+      - $ref: '#/components/x-headers/accept-language'      
+      - $ref: '#/components/x-headers/authorization-bearer'
+      - $ref: '#/components/x-headers/content-type'
+      - $ref: '#/components/x-headers/x-mt-certification-token'
+      - $ref: '#/components/x-headers/x-mt-api-version'
+      - $ref: '#/components/x-headers/x-mt-business-unit-uuid'
+      - $ref: '#/components/x-headers/x-mt-business-unit-type'
+    post:
+      tags: 
+        - Orders
+      summary: Calculate Order Totals
+      description: |
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:  
+              $ref: '#/components/schemas/Orders.Request.Calculation'
+      responses:
+        '200':
+          description: |
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: integer
+                    format: int132
+                  data:
+                    properties:
+                      calculation:
+                        $ref: '#/components/schemas/Orders.Calculation'
+                        
+  '/orders/{order_id}':                        
+    parameters: 
+      - $ref: '#/components/x-headers/accept'
+      - $ref: '#/components/x-headers/accept-language'      
+      - $ref: '#/components/x-headers/authorization-bearer'
+      - $ref: '#/components/x-headers/content-type'
+      - $ref: '#/components/x-headers/x-mt-certification-token'   
+      - $ref: '#/components/x-headers/x-mt-api-version'
+      - $ref: '#/components/x-headers/x-mt-business-unit-uuid'
+      - $ref: '#/components/x-headers/x-mt-business-unit-type'
+    get:
+      tags: 
+        - Orders
+      summary: Fetch One Order
+      description: Fetch one Order by ID.
+      parameters:
+        - in: path
+          name: order_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: |
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: integer
+                    format: int132
+                  data:
+                    properties:
+                      order:
+                        $ref: '#/components/schemas/Orders.Order'
+
+  '/orders/{order_id}/update_eta':
+    parameters: 
+      - $ref: '#/components/x-headers/accept'
+      - $ref: '#/components/x-headers/accept-language'      
+      - $ref: '#/components/x-headers/authorization-bearer'
+      - $ref: '#/components/x-headers/content-type'
+      - $ref: '#/components/x-headers/x-mt-certification-token'   
+      - $ref: '#/components/x-headers/x-mt-api-version'
+      - $ref: '#/components/x-headers/x-mt-business-unit-uuid'
+      - $ref: '#/components/x-headers/x-mt-business-unit-type'
+    patch:
+      tags: 
+        - Orders
+      summary: Update Order estimated time of arrival (ETA)
+      description: |
+      parameters:
+        - in: path
+          name: order_id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:  
+              properties:
+                eta:
+                  type: integer
+                  minimum: 0
+      responses:
+        '200':
+          description: |
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: integer
+                    format: int132
+                  data:
+                    properties:
+                      order:
+                        $ref: '#/components/schemas/Orders.Order'
+
+  '/orders/{order_id}/status':
+    parameters: 
+      - $ref: '#/components/x-headers/accept'
+      - $ref: '#/components/x-headers/accept-language'      
+      - $ref: '#/components/x-headers/authorization-bearer'
+      - $ref: '#/components/x-headers/content-type'
+      - $ref: '#/components/x-headers/x-mt-certification-token'   
+      - $ref: '#/components/x-headers/x-mt-api-version'
+      - $ref: '#/components/x-headers/x-mt-business-unit-uuid'
+      - $ref: '#/components/x-headers/x-mt-business-unit-type'
+    patch:
+      tags: 
+        - Orders
+      summary: Update Order status
+      description: |
+      parameters:
+        - in: path
+          name: order_id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:  
+              properties:
+                status:
+                  type: string
+                  enum: ['cancelled']
+                reason:  
+                  type: string
+                  nullable: true                  
+      responses:
+        '200':
+          description: |
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: integer
+                    format: int132
+                  data:
+                    properties:
+                      order:
+                        $ref: '#/components/schemas/Orders.Order'
+                        
+  '/takeout-info':
+    parameters: 
+      - $ref: '#/components/x-headers/accept'
+      - $ref: '#/components/x-headers/accept-language'      
+      - $ref: '#/components/x-headers/authorization-bearer'
+      - $ref: '#/components/x-headers/content-type'
+      - $ref: '#/components/x-headers/x-mt-certification-token'   
+      - $ref: '#/components/x-headers/x-mt-api-version'
+    get:
+      tags: 
+        - Venue Info
+      summary: Fetch Venue take-out status
+      description: Fetch venue take-out pickup times. Pickup times array contains RFC-3339 formatted timestamps rounded to 5 minute slots for which take-out is available.
+      responses:
+        '200':
+          description: |
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: integer
+                    format: int132
+                  data:
+                    properties:
+                      takeout_info:
+                       $ref: '#/components/schemas/Orders.TakeoutStatus'
+
+  '/delivery-info':
+    parameters: 
+      - $ref: '#/components/x-headers/accept'
+      - $ref: '#/components/x-headers/accept-language'      
+      - $ref: '#/components/x-headers/authorization-bearer'
+      - $ref: '#/components/x-headers/content-type'
+      - $ref: '#/components/x-headers/x-mt-certification-token'   
+      - $ref: '#/components/x-headers/x-mt-api-version'
+    get:
+      tags: 
+        - Venue Info
+      summary: Fetch Venue delivery pickup status
+      description: Fetch Venue delivery pickup status for the given location. Delivery times array contains RFC-3339 formatted timestamps rounded to 5 minute slots for which delivery is available to the given location. 
+      parameters:
+        - in: query
+          name: latitude
+          required: true
+          schema:
+            type: number
+            format: double
+        - in: query
+          name: longitude
+          required: true
+          schema:
+            type: number
+            format: double
+      responses:
+        '200':
+          description: |
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: integer
+                    format: int132
+                  data:
+                    properties:
+                      delivery_info:
+                        type: object
+                        properties:
+                          maps:
+                            type: array
+                            items: 
+                              $ref: '#/components/schemas/Orders.DeliveryStatus'
+                          serving_times:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/Common.ServingTime'
+                          menu_id:
+                            type: string
+
+  
+  
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+    basicAuth:
+      type: http
+      scheme: basic
+
+  
+
+  
+  x-headers:
+    accept:
+      in: header
+      name: Accept
+      required: true
+      schema:
+        type: string
+        default: application/json
+    accept-language:
+      in: header
+      name: Accept-Language
+      required: true
+      schema:
+        type: string
+        default: en
+    authorization-basic:
+      in: header
+      name: Authorization
+      required: true
+      schema:
+        type: string
+    authorization-bearer:
+      in: header
+      name: Authorization
+      required: true
+      schema:
+        type: string
+      default: Bearer {access_token}
+    content-type:
+      in: header
+      name: Content-Type
+      required: true
+      schema:
+        type: string
+        default: application/json
+    x-mt-api-version:
+      in: header
+      name: X-Mt-Api-Vesrion
+      required: true
+      schema:
+        type: string        
+      default: 1.2.4  
+    x-mt-certification-token:
+      in: header
+      name: X-Mt-Certification-Token
+      required: true
+      schema:
+        type: string
+      default: e9d85e14aaf42c4762f94109d7dcd804088c4954
+    x-mt-business-unit-uuid:
+      in: header
+      name: X-Mt-Business-Unit-Uuid
+      required: true
+      schema:
+        type: string
+      default: f6ff982a-5fb3-4ef5-baa1-5a96c80f87b2
+    x-mt-business-unit-type:
+      in: header
+      name: X-Mt-Business-Unit-Type
+      required: true
+      schema:
+        type: string
+      default: Venue
+
+  schemas:
+    # `OAuth` schema namespace
+
+    OAuth.AccessToken:
+      type: object
+      properties:
+        access_token:
+          type: string
+        token_type:
+          type: string
+        scope:
+          type: string
+        expires_in:
+          type: integer
+
+
+
+
+    # `Venues` schema namespace
+
+    Venues.Venue:
+      type: object
+      properties:
+        id:
+          type: string
+        order_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/Orders.OrderType'
+        name:
+          type: string
+        description:
+          type: string
+        translations:
+          type: array
+          items:
+            type: string
+        image: 
+            $ref: '#/components/schemas/Venues.Image'
+        cuisine:
+          type: string  
+        location:
+          $ref: '#/components/schemas/Common.Geolocation'
+        address:
+          type: string
+        city:
+          type: string
+        postal_code:
+          type: string          
+        country:
+          $ref: '#/components/schemas/Common.Country'
+        currency:
+          $ref: '#/components/schemas/Common.Currency'
+        language:
+          type: string
+        timezone:
+          $ref: '#/components/schemas/Common.Timezone'
+        configuration:
+          type: array
+          items:
+           $ref: '#/components/schemas/Configuration'
+        serving_times:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Common.ServingTime'
+        taxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Venues.Taxes'
+        phone:
+          type: string
+        pickup_time:
+          type: integer
+        available_payment_methods:
+          type: array
+          items:
+            $ref: '#/components/schemas/Venues.AvailablePaymentMethods'
+        enabled:
+          type: boolean
+        is_open:
+          type: boolean
+        menu_id:
+          type: string
+        delivery_configuration:
+          type: object
+          properties:
+            maps:
+              type: array
+              items: 
+                $ref: '#/components/schemas/Orders.DeliveryStatus'
+            serving_times:
+              type: array
+              items:
+                $ref: '#/components/schemas/Common.ServingTime'
+
+    Venues.VenueList:
+      type: object
+      properties: 
+        id: 
+          type: string
+        enabled:
+          type: boolean
+        name:
+          type: string
+        configuration:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Configuration'
+        updated_at:
+          type: string
+
+    Venues.Image:
+      type: object
+      properties:
+        thumbnail_small:
+          type: string
+        thumbnail_medium:
+          type: string
+        fullsize:
+          type: string
+
+    Venues.Taxes:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        inside_rate:
+          type: integer
+        outside_rate:
+          type: integer
+        applies_to_delivery_fee:
+          type: boolean
+
+    Venues.AvailablePaymentMethods:
+      type: object
+      properties:
+        id:
+          type: integer
+        payment_method_id:
+          type: integer
+        payment_method_type_id:
+          type: integer
+        payment_method_brand:
+          type: string
+        payment_processor_type_id:
+          type: integer
+        payment_processor_id:
+          type: integer
+        properties:
+          type: string
+          nullable: true
+          default: null
+          example: null
+        fraud_detection_processor_id:
+          type: string
+          nullable: true
+          default: null
+          example: null
+        visibility_scopes:
+          type: string
+          nullable: true
+          default: null
+          example: null
+          
+    Orders.DeliveryStatus:
+      type: object
+      properties:
+        delivery_fee:
+          $ref: '#/components/schemas/Orders.DeliveryFee'
+        minimum_order_amount:
+          type: integer
+        name:
+          type: string
+        coordinate_polygon:
+          type: array
+          items:
+            type: array
+            items:
+              example:
+                [
+                  19.722188883774436,
+                  45.2407792818847
+                ]
+        state:
+          type: string
+
+    Orders.DeliveryFee:
+      type: object
+      properties:
+        id:
+          type: integer
+        type_id:
+          type: integer
+        reference_type:
+          type: string
+        venue_id:
+          type: integer
+        price:
+          type: integer
+        price_per_unit:
+          type: integer
+        unit:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          example: "2021-11-25 11:20:00"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2021-11-25 11:20:00"
+
+    Orders.TakeoutStatus:
+      type: object
+      properties:
+        takeout_times:
+          type: array
+          items:
+            type: string
+            format: date-time
+            example: "2021-11-25 11:20:00"
+
+    # `Menus` schema namespace
+
+    Configuration:
+      type: object
+      properties:
+        name:
+          type: string
+        api_field_name:
+          type: string
+        value:
+          type: string
+
+    Menus.Menu:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        updated_at:
+          type: string
+    
+    Menus.Menu.withCategories:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        translations:
+          type: array
+          items:
+            type: string
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Menus.Category'
+        updated_at:
+          type: string
+    
+    Menus.Menu.withItems:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Menus.Category.withItems'        
+
+    Menus.Category:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        translations:
+          type: array
+          items:
+            type: string
+        position:
+          type: integer
+        image:
+          $ref: '#/components/schemas/Common.Image' 
+        subcategories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Menus.Subcategory'
+        state:
+          type: string
+          enum: ['active', 'disabled']
+        is_visible:
+          type: boolean
+          
+    Menus.Category.withItems:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        image:
+          $ref: '#/components/schemas/Common.Image' 
+        subcategories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Menus.Subcategory.withItems'
+        state:
+          type: string
+          enum: ['active', 'disabled']      
+          
+    Menus.Subcategory:
+      type: object
+      properties:
+        id:
+          type: string
+        category_id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        translations:
+          type: array
+          items:
+            type: string
+        image:
+          $ref: '#/components/schemas/Common.Image'
+        position:
+          type: integer
+        serving_times:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Common.ServingTime'          
+        state:
+          type: string
+          enum: ['active', 'disabled']
+        is_visible:
+          type: boolean
+    
+    Menus.Subcategory.withItems:
+      type: object
+      properties:
+        id:
+          type: string
+        category_id:
+          type: string          
+        name:
+          type: string
+        description:
+          type: string
+        translations:
+          type: array
+          items:
+            type: string
+        image:
+          $ref: '#/components/schemas/Common.Image'
+        position:
+          type: integer
+        serving_times:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Common.ServingTime'  
+        menu_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Menus.Item' 
+        state:
+          type: string
+          enum: ['active', 'disabled']     
+        is_visible:
+          type: boolean
+
+    Menus.Item:
+      type: object
+      properties:
+        id:
+          type: string
+        core_id:
+          type: string
+        subcategory_id:
+          type: string
+        name:
+          type: string
+        position:
+          type: integer
+        is_in_combo:
+          type: boolean
+        description:
+          type: string
+        translations:
+          type: array
+          items:
+            type: string
+        image:
+          $ref: '#/components/schemas/Common.Image'
+        price_levels:
+          $ref: '#/components/schemas/Menus.PriceLevel'
+        modifier_groups:
+          $ref: '#/components/schemas/Menus.ModifierGroup'
+        allergens:
+          $ref: '#/components/schemas/Menus.Allergen'          
+        state:
+          type: string
+          enum: ['active', 'disabled']
+        food_type:
+          type: integer
+        tax_id:
+          type: string
+        is_visible:
+          type: boolean
+        show_in_menu:
+          type: boolean
+        allow_takeout:
+          type: boolean
+        allow_delivery:
+          type: boolean
+        allow_dine_in:
+          type: boolean
+        allow_foodspot:
+          type: boolean
+        is_self_serving:
+          type: boolean
+
+    Menus.PriceLevel:
+      type: object
+      properties:
+        id:
+          type: string
+        core_id:
+          type: string
+        name:
+          type: string
+        translations:
+          type: array
+          items:
+            type: string
+        price:
+          type: integer
+        calories:
+          type: integer
+        state:
+          type: string
+          enum: ['active', 'disabled']
+
+    Menus.ComboMeal:
+      type: object
+      properties:
+        id:
+          type: string
+        core_id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        translations:
+          type: array
+          items:
+            type: string
+        position:
+          type: integer
+        image:
+          $ref: '#/components/schemas/Common.Image'
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/Menus.ComboGroup'
+        state:
+          type: string
+          enum: ['active', 'disabled']
+        is_visible:
+          type: boolean
+
+    Menus.ComboGroup:
+      type: object
+      properties:
+        id:
+          type: string
+        is_main_group:
+          type: boolean
+        combo_meal_id:
+          type: string
+        name: 
+          type: string
+        translations:
+          type: array
+          items:
+            type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Menus.ComboItem'
+
+    Menus.ComboItem:
+      type: object
+      properties:
+        id:
+          type: string
+        core_id:
+          type: string
+        menu_item_id:
+          type: string
+        menu_item_price_level_id:
+          type: string
+        combo_group_id:
+          type: string
+          nullable: true
+        name:
+          type: string
+        description:
+          type: string
+        translations:
+          type: array
+          items:
+            type: string
+        is_preselected:
+          type: boolean
+        image:
+          $ref: '#/components/schemas/Common.Image'
+        price:
+          type: integer
+        state:
+          type: string
+          enum: ['active', 'disabled']
+        is_visible:
+          type: boolean
+          
+    Menus.ModifierGroup:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        translations:
+          type: array
+          items:
+            type: string
+        min_selected:
+          type: integer
+        max_selected:
+          type: integer
+        modifiers:
+          $ref: '#/components/schemas/Menus.Modifier'
+        state:
+          type: string
+          enum: ['active', 'disabled']
+        is_visible:
+          type: boolean
+          
+    Menus.Modifier:
+      type: object
+      properties:
+        id:
+          type: string
+        core_id:
+          type: string
+        name:
+          type: string
+        image:
+          $ref: '#/components/schemas/Common.Image'          
+        price:
+          type: integer
+        calories:
+          type: integer
+        allergens:
+          $ref: '#/components/schemas/Menus.Allergen'          
+        state:
+          type: string
+          enum: ['active', 'disabled']
+        is_visible:
+          type: boolean
+        position:
+          type: integer
+        is_preselected:
+          type: boolean
+          
+    Menus.Allergen:
+      type: object
+      properties:
+        name:
+          type: string
+
+
+
+
+    # `Orders` schema namespace
+    
+    Orders.Request.Order:
+      type: object
+      properties:
+        external_reference:
+          type: string
+        external_code:
+          type: string
+        order_type:
+          type: string
+          enum: ['dine-in', 'take-out', 'delivery']
+        cart:
+          $ref: '#/components/schemas/Orders.Request.Cart'
+        charges:
+          $ref: '#/components/schemas/Orders.Request.Charges'
+          nullable: true
+        payment_info:      
+          $ref: '#/components/schemas/Orders.Request.PaymentInfo'
+          nullable: true
+        pickup_info:      
+          $ref: '#/components/schemas/Orders.Request.PickupInfo'
+          nullable: true
+        delivery_info:      
+          $ref: '#/components/schemas/Orders.Request.DeliveryInfo'
+          nullable: true
+        customer:
+          $ref: '#/components/schemas/Orders.Customer'
+        notes:
+          type: string
+          nullable: true
+    
+    Orders.Request.Calculation:
+      type: object
+      properties:
+        cart:
+          $ref: '#/components/schemas/Orders.Request.Cart'
+        charges:
+          $ref: '#/components/schemas/Orders.Request.Charges'
+          nullable: true
+        order_type:
+          type: string
+          enum: ['dine-in', 'take-out', 'delivery']
+        delivery_info:      
+          $ref: '#/components/schemas/Orders.Request.DeliveryInfo'
+          nullable: true
+
+    Orders.Request.Cart:
+      type: object
+      properties:
+        menu_items:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Orders.Request.Cart.MenuItem'
+        combo_meals:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Orders.Request.Cart.ComboMeal'            
+
+    Orders.Request.Cart.MenuItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        quantity:
+          type: integer
+        price_level:
+          $ref: '#/components/schemas/Orders.Request.Cart.PriceLevel'
+        modifiers: 
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Orders.Request.Cart.Modifier'
+        notes:
+          type: string
+    
+    Orders.Request.Cart.PriceLevel:
+      type: object
+      properties:    
+        id:
+          type: integer
+          
+    Orders.Request.Cart.ComboMeal:
+      type: object
+      properties:    
+        id:
+          type: integer
+        quantity:
+          type: integer
+        combo_items: 
+          type: array
+          items:
+            $ref: '#/components/schemas/Orders.Request.Cart.ComboItem'
+        notes:
+          type: string
+
+    Orders.Request.Cart.ComboItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        modifiers: 
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Orders.Request.Cart.Modifier'
+
+    Orders.Request.Cart.Modifier:
+      type: object
+      properties:    
+        id:
+          type: integer
+        quantity:
+          type: integer
+    
+    Orders.Request.PaymentInfo:
+      type: object
+      properties:
+        payment_init_reference:
+          type: string
+          nullable: true
+        payment_method:
+          type: string
+          enum: ['cash', 'visa', 'mastercard', 'amex', 'swiss-lunch-check', 'maestro', 'paypal', 'mercado-pago', 'ideal', 'other']
+          nullable: true
+        additional_info:
+          type: object
+          nullable: true
+          
+    Orders.Request.PickupInfo:
+      type: object
+      properties:
+        is_asap:
+          type: boolean
+        pickup_at:
+          type: string
+          format: date-time
+          nullable: true
+        phone_number:
+          type: string          
+    
+    Orders.Request.Charges:
+      type: object
+      properties:
+        delivery_fee:
+          $ref: '#/components/schemas/Orders.Request.Fee'
+          nullable: true
+        minimum_order_fee:
+          $ref: '#/components/schemas/Orders.Request.Fee'
+          nullable: true
+        tip:
+          $ref: '#/components/schemas/Orders.Request.Tip'
+          nullable: true
+          
+    Orders.Request.Fee:
+      type: object
+      properties:
+        amount:
+          type: integer
+          minimum: 0
+        tax: 
+          $ref: '#/components/schemas/Orders.Request.Tax'
+          nullable: true
+          
+    Orders.Request.Tax:
+      type: object
+      properties:
+        amount:
+          type: integer
+          minimum: 0
+        rate:
+          type: number
+          format: float
+          minimum: 0
+          nullable: true
+          
+    Orders.Request.Tip:
+      type: object
+      properties:
+        amount:
+          type: integer
+          minimum: 0
+        rate:
+          type: number
+          format: float
+          minimum: 0
+          nullable: true
+          
+    Orders.Request.DeliveryInfo:
+      type: object
+      properties:
+        fulfilment_type:
+          type: string
+          enum: ['venue', 'aggregator']      
+        delivery_address:
+          $ref: '#/components/schemas/Common.DeliveryAddress'
+        delivery_location:
+          $ref: '#/components/schemas/Common.Geolocation'
+        is_asap:
+          type: boolean
+        pickup_at:
+          type: string
+          format: date-time
+          nullable: true
+        delivery_at:
+          type: string
+          format: date-time
+          nullable: true
+        phone_number:
+          type: string          
+        notes:
+          type: string
+          nullable: true
+
+    Orders.Order:
+      type: object 
+      properties:
+        id: 
+          type: string
+        external_reference:
+          type: string
+        external_code:
+          type: string
+        code:
+          type: string
+        order_type:
+          type: string
+          enum: ['dine-in', 'take-out', 'delivery']
+        cart: 
+          $ref: '#/components/schemas/Orders.Cart'
+        calculation:
+          $ref: '#/components/schemas/Orders.Calculation'
+        customer:
+          $ref: '#/components/schemas/Orders.Customer'
+        status:
+          type: string 
+          enum: ['created', 'preparing', 'ready', 'failed', 'cancelled']
+        notes:
+          type: string
+          nullable: true
+        pickup_at:
+          type: string
+          format: date-time
+          example: "2021-11-25 11:20:00"
+        ready_at:
+          type: string
+          format: date-time
+          nullable: true
+          example: "2021-11-25 11:20:00"
+        arriving_at:
+          type: string
+          format: date-time
+          example: "2021-11-25 11:20:00"
+        delivery_at:
+          type: string
+          format: date-time
+          example: "2021-11-25 11:20:00"
+        created_at:
+          type: string 
+          format: date-time
+          example: "2021-11-16T15:59:56+00:00"
+
+    Orders.Cart:
+      type: object
+      properties:
+        menu_items:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Orders.Cart.MenuItem'
+        combo_meals:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Orders.Cart.ComboMeal' 
+            
+    Orders.Cart.MenuItem:
+      type: object
+      properties: 
+        quantity:
+          type: integer
+        name:
+          type: string          
+        price_level:
+          $ref: '#/components/schemas/Orders.Cart.PriceLevel'
+        modifiers: 
+          type: array
+          items:
+            $ref: '#/components/schemas/Orders.Cart.Modifier'
+        notes:
+          type: string
+          nullable: true
+
+    Orders.Cart.ComboMeal:
+      type: object
+      properties:
+        quantity:
+          type: integer
+        name:
+          type: string          
+        combo_items: 
+          type: array
+          items:
+            $ref: '#/components/schemas/Orders.Cart.ComboItem'
+        notes:
+          type: string
+          nullable: true
+          
+    Orders.Cart.ComboItem:
+      type: object
+      properties:
+        name:
+          type: string
+        modifiers: 
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Orders.Request.Cart.Modifier'
+    
+    Orders.Cart.PriceLevel:
+      type: object
+      properties:   
+        name:
+          type: string
+        price:
+          type: integer
+          
+    Orders.Cart.Modifier:
+      type: object
+      properties:   
+        quantity: 
+          type: integer                 
+        name:
+          type: string
+        price:
+          type: integer
+
+    Orders.Customer:
+      type: object
+      properties:   
+        email:
+          type: string
+          format: email
+          nullable: true
+        first_name:
+          type: string
+        last_name:
+          type: string
+        phone_number:
+          type: string
+    
+    Orders.Delivery:
+      type: object
+      properties:
+        fulfilment_type:
+          type: string
+          enum: ['venue', 'aggregator']
+        delivery_address:
+          $ref: '#/components/schemas/Common.DeliveryAddress'
+        delivery_location:
+          $ref: '#/components/schemas/Common.Geolocation'
+        is_asap:
+          type: boolean          
+        pickup_at:
+          type: string
+          format: date-time
+          nullable: true
+        delivery_at:
+          type: string
+          format: date-time
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+
+    Orders.Calculation:
+      type: object
+      properties:   
+        type:
+          type: string          
+          enum: ['inclusive', 'exclusive']
+        subtotal: 
+          type: integer  
+        discount:
+          type: integer
+        fees:
+          type: object
+          properties:
+            delivery_fee:
+              type: integer
+              minimum: 0
+            minimum_order_fee:
+              type: integer
+              minimum: 0
+        tip:
+          type: object
+          properties:
+            amount:
+              type: integer
+              minimum: 0
+            rate:
+              type: number
+              minimum: 0
+        tax:  
+          type: object
+          properties:
+            total:
+              type: integer
+              minimum: 0
+            rates: 
+              type: array
+              items:
+                type: object
+                properties:
+                  amount:
+                    type: integer
+                    minimum: 0
+                  rate:
+                    type: number
+                    format: float
+                    minimum: 0
+        total:  
+          type: integer
+  
+    Orders.OrderType:
+      type: object
+      properties:
+        reference_type:
+          type: string
+        state: 
+          type: string
+        is_table_supported:
+          type: boolean
+
+  
+ 
+    # `Common` schema namespace
+    
+    Common.Country:
+      type: object
+      properties:     
+        iso_code:
+          type: string
+          minLength: 2
+          maxLength: 2          
+        name:
+          type: string                     
+    
+    Common.Currency:
+      type: object
+      properties:     
+        iso_code:
+          type: string
+          minLength: 3
+          maxLength: 3
+        symbol:
+          type: string
+        rounding_unit:
+          type: number
+          format: float
+
+    Common.DeliveryAddress:
+      type: object
+      properties:
+        formatted_address:
+          type: string      
+        street_name:
+          type: string
+        street_number:
+          type: string
+        postal_code:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        locality:
+          type: string
+          nullable: true
+        apartment:
+          type: string
+          nullable: true
+
+    Common.Image:
+      type: object
+      properties:     
+        thumbnail_small:
+          type: string
+          format: uri
+        thumbnail_medium:
+          type: string
+          format: uri
+        fullsize:
+          type: string
+          format: uri
+          
+    Common.Geolocation:
+      type: object
+      properties:     
+        latitude:
+          type: number
+          format: float
+        longitude:
+          type: number
+          format: float
+
+    Common.ServingTime:
+      type: object
+      properties:     
+        type:
+          type: string
+        time_from:
+          type: string
+          nullable: true
+        time_to:
+          type: string
+          nullable: true
+        date:
+          type: string
+          format: date
+          nullable: true
+        date_to:
+          type: string
+          format: date
+          nullable: true
+        weekdays:
+          type: array
+          items:
+            type: integer
+            enum: [1, 2, 3, 4, 5, 6, 7]
+        is_open:
+          type: boolean
+
+    Common.Timezone:
+      type: object
+      properties:
+        name:
+          type: string
+        offset:
+          type: string
