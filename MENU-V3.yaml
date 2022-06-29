@@ -4091,7 +4091,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -4176,7 +4176,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '36'
+                example: 36
             Content-Type:
               schema:
                 type: string
@@ -4191,7 +4191,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -4200,11 +4200,11 @@ paths:
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 60
             X-RateLimit-Remaining:
               schema:
                 type: integer
-                example: '58'
+                example: 58
           content:
             application/json:
               schema:
@@ -4548,7 +4548,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Transfer-Encoding:
               schema:
@@ -4561,11 +4561,11 @@ paths:
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 60
             X-RateLimit-Remaining:
               schema:
                 type: integer
-                example: '59'
+                example: 59
           content:
             application/json:
               schema:
@@ -4929,7 +4929,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '962'
+                example: 962
             Content-Type:
               schema:
                 type: string
@@ -4944,7 +4944,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -4953,11 +4953,11 @@ paths:
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 60
             X-RateLimit-Remaining:
               schema:
                 type: integer
-                example: '59'
+                example: 59
           content:
             application/json:
               schema:
@@ -5173,7 +5173,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '871'
+                example: 871
             Content-Type:
               schema:
                 type: string
@@ -5188,7 +5188,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -5197,11 +5197,11 @@ paths:
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 60
             X-RateLimit-Remaining:
               schema:
                 type: integer
-                example: '59'
+                example: 59
           content:
             application/json:
               schema:
@@ -5251,7 +5251,7 @@ paths:
           application/json:
             schema:
               type: object
-              example: ''
+              example: 'fdfd'
       parameters:
         - name: Accept
           in: header
@@ -5311,7 +5311,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '871'
+                example: 871
             Content-Type:
               schema:
                 type: string
@@ -5326,7 +5326,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -5335,11 +5335,11 @@ paths:
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 60
             X-RateLimit-Remaining:
               schema:
                 type: integer
-                example: '59'
+                example: 59
           content:
             application/json:
               schema:
@@ -5436,7 +5436,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '129'
+                example: 129
             Content-Type:
               schema:
                 type: string
@@ -5451,7 +5451,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -5460,11 +5460,11 @@ paths:
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 60
             X-RateLimit-Remaining:
               schema:
                 type: integer
-                example: '58'
+                example: 58
           content:
             application/json:
               schema:
@@ -5544,7 +5544,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '90'
+                example: 90
             Content-Type:
               schema:
                 type: string
@@ -5559,7 +5559,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -5568,11 +5568,11 @@ paths:
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 60
             X-RateLimit-Remaining:
               schema:
                 type: integer
-                example: '58'
+                example: 58
           content:
             application/json:
               schema:
@@ -5644,7 +5644,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '90'
+                example: 90
             Content-Type:
               schema:
                 type: string
@@ -5659,7 +5659,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -5668,11 +5668,11 @@ paths:
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 60
             X-RateLimit-Remaining:
               schema:
                 type: integer
-                example: '59'
+                example: 59
           content:
             application/json:
               schema:
@@ -5750,7 +5750,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '94'
+                example: 94
             Content-Type:
               schema:
                 type: string
@@ -5765,7 +5765,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -5774,11 +5774,11 @@ paths:
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 60
             X-RateLimit-Remaining:
               schema:
                 type: integer
-                example: '59'
+                example: 59
           content:
             application/json:
               schema:
@@ -5850,7 +5850,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '36'
+                example: 36
             Content-Type:
               schema:
                 type: string
@@ -5865,7 +5865,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -5874,11 +5874,11 @@ paths:
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 60
             X-RateLimit-Remaining:
               schema:
                 type: integer
-                example: '58'
+                example: 58
           content:
             application/json:
               schema:
@@ -5947,7 +5947,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '312'
+                example: 312
             Content-Type:
               schema:
                 type: string
@@ -5962,16 +5962,16 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 60
             X-RateLimit-Remaining:
               schema:
                 type: integer
-                example: '59'
+                example: 59
           content:
             application/json:
               schema:
@@ -6124,7 +6124,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '479'
+                example: 479
             Content-Type:
               schema:
                 type: string
@@ -6139,7 +6139,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -6148,11 +6148,11 @@ paths:
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 6
             X-RateLimit-Remaining:
               schema:
                 type: integer
-                example: '59'
+                example: 59
           content:
             application/json:
               schema:
@@ -6297,7 +6297,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '274'
+                example: 274
             Content-Type:
               schema:
                 type: string
@@ -6312,16 +6312,16 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 60
             X-RateLimit-Remaining:
               schema:
                 type: integer
-                example: '59'
+                example: 59
           content:
             application/json:
               schema:
@@ -6457,7 +6457,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '274'
+                example: 274
             Content-Type:
               schema:
                 type: string
@@ -6477,11 +6477,11 @@ paths:
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 60
             X-RateLimit-Remaining:
               schema:
                 type: integer
-                example: '59'
+                example: 59
           content:
             application/json:
               schema:
@@ -6614,7 +6614,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '139'
+                example: 139
             Content-Type:
               schema:
                 type: string
@@ -6629,7 +6629,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -6638,7 +6638,7 @@ paths:
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 60
             X-RateLimit-Remaining:
               schema:
                 type: integer
@@ -6727,7 +6727,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '132'
+                example: 132
             Content-Type:
               schema:
                 type: string
@@ -6751,11 +6751,11 @@ paths:
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 60
             X-RateLimit-Remaining:
               schema:
                 type: integer
-                example: '58'
+                example: 58
           content:
             application/json:
               schema:
@@ -6830,7 +6830,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '135'
+                example: 135
             Content-Type:
               schema:
                 type: string
@@ -6845,7 +6845,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -6854,7 +6854,7 @@ paths:
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 60
             X-RateLimit-Remaining:
               schema:
                 type: integer
@@ -6958,7 +6958,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -6971,7 +6971,7 @@ paths:
             X-RateLimit-Remaining:
               schema:
                 type: integer
-                example: '58'
+                example: 58
           content:
             application/json:
               schema:
@@ -7046,7 +7046,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '36'
+                example: 36
             Content-Type:
               schema:
                 type: string
@@ -7070,11 +7070,11 @@ paths:
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 60
             X-RateLimit-Remaining:
               schema:
                 type: integer
-                example: '55'
+                example: 55
           content:
             application/json:
               schema:
@@ -7142,7 +7142,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '1757'
+                example: 1757
             Content-Type:
               schema:
                 type: string
@@ -7162,11 +7162,11 @@ paths:
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 60
             X-RateLimit-Remaining:
               schema:
                 type: integer
-                example: '58'
+                example: 58
           content:
             application/json:
               schema:
@@ -7317,7 +7317,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '263'
+                example: 263
             Content-Type:
               schema:
                 type: string
@@ -7332,16 +7332,16 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 60
             X-RateLimit-Remaining:
               schema:
                 type: integer
-                example: '59'
+                example: 59
           content:
             application/json:
               schema:
@@ -7422,7 +7422,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '36'
+                example: 36
             Content-Type:
               schema:
                 type: string
@@ -7437,7 +7437,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             X-RateLimit-Limit:
               schema:
@@ -7446,7 +7446,7 @@ paths:
             X-RateLimit-Remaining:
               schema:
                 type: integer
-                example: '58'
+                example: 58
           content:
             application/json:
               schema:
@@ -7515,7 +7515,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '36'
+                example: 36
             Content-Type:
               schema:
                 type: string
@@ -7530,16 +7530,16 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 60
             X-RateLimit-Remaining:
               schema:
                 type: integer
-                example: '59'
+                example: 59
           content:
             application/json:
               schema:
@@ -7636,7 +7636,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '263'
+                example: 263
             Content-Type:
               schema:
                 type: string
@@ -7656,11 +7656,11 @@ paths:
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 60
             X-RateLimit-Remaining:
               schema:
                 type: integer
-                example: '59'
+                example: 59
           content:
             application/json:
               schema:
@@ -7756,7 +7756,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '248'
+                example: 248
             Content-Type:
               schema:
                 type: string
@@ -7776,11 +7776,11 @@ paths:
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 60
             X-RateLimit-Remaining:
               schema:
                 type: integer
-                example: '58'
+                example: 58
           content:
             application/json:
               schema:
@@ -7861,7 +7861,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '339'
+                example: 339
             Content-Type:
               schema:
                 type: string
@@ -7881,11 +7881,11 @@ paths:
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 60
             X-RateLimit-Remaining:
               schema:
                 type: integer
-                example: '59'
+                example: 59
           content:
             application/json:
               schema:
@@ -7979,7 +7979,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '247'
+                example: 247
             Content-Type:
               schema:
                 type: string
@@ -7999,7 +7999,7 @@ paths:
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 60
             X-RateLimit-Remaining:
               schema:
                 type: integer
@@ -8084,7 +8084,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '336'
+                example: 336
             Content-Type:
               schema:
                 type: string
@@ -8284,7 +8284,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '36'
+                example: 36
             Content-Type:
               schema:
                 type: string
@@ -8304,7 +8304,7 @@ paths:
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 60
             X-RateLimit-Remaining:
               schema:
                 type: integer
@@ -8387,7 +8387,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '349'
+                example: 349
             Content-Type:
               schema:
                 type: string
@@ -8652,7 +8652,7 @@ paths:
             X-RateLimit-Remaining:
               schema:
                 type: integer
-                example: '59'
+                example: 59
           content:
             application/json:
               schema:
@@ -8687,7 +8687,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '140'
+                example: 140
             Content-Type:
               schema:
                 type: string
@@ -8698,7 +8698,7 @@ paths:
                 example: Mon, 16 Apr 2018 07:51:40 GMT
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
           content:
             application/json:
@@ -8799,11 +8799,11 @@ paths:
             X-RateLimit-Limit:
               schema:
                 type: integer
-                example: '60'
+                example: 60
             X-RateLimit-Remaining:
               schema:
                 type: integer
-                example: '59'
+                example: 59
           content:
             application/json:
               schema:
@@ -8838,7 +8838,7 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '140'
+                example: 140
             Content-Type:
               schema:
                 type: string
@@ -9077,7 +9077,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             X-RateLimit-Limit:
               schema:
