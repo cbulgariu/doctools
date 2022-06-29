@@ -1,6 +1,6 @@
 openapi: 3.0.4
 info:
-    title: orderDirect - Inventory API
+    title: orderDirect - Inventory API Test
     version: 'inventory_1.4.3'
     description: >
         # Policies and Conventions
