@@ -177,7 +177,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
         - name: Application
           in: header
@@ -230,7 +230,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.6.0
         - name: Application
           in: header
@@ -389,7 +389,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
         - name: User-Agent
           in: header
@@ -439,7 +439,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
       responses:
         '200':
@@ -483,7 +483,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
       responses:
         '200':
@@ -532,7 +532,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
       responses:
         '200':
@@ -610,7 +610,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '706'
             Content-Type:
               schema:
@@ -626,15 +626,15 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '56'
           content:
             application/json:
@@ -706,7 +706,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.3
       responses:
         '200':
@@ -734,7 +734,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '704'
             Content-Type:
               schema:
@@ -750,15 +750,15 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '58'
           content:
             application/json:
@@ -840,7 +840,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '137'
             Content-Type:
               schema:
@@ -856,15 +856,15 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '59'
           content:
             application/json:
@@ -936,7 +936,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '168'
             Content-Type:
               schema:
@@ -952,15 +952,15 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '59'
           content:
             application/json:
@@ -1017,7 +1017,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.3
       responses:
         '200':
@@ -1045,7 +1045,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '700'
             Content-Type:
               schema:
@@ -1061,7 +1061,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -1069,11 +1069,11 @@ paths:
                 example: Authorization
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '58'
           content:
             application/json:
@@ -1137,7 +1137,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.3
         - name: XDEBUG_SESSION_START
           in: query
@@ -1170,7 +1170,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '36'
             Content-Type:
               schema:
@@ -1186,7 +1186,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -1194,11 +1194,11 @@ paths:
                 example: Authorization
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '57'
           content:
             application/json:
@@ -1269,7 +1269,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '143'
             Content-Type:
               schema:
@@ -1285,15 +1285,15 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '59'
           content:
             application/json:
@@ -1368,7 +1368,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '138'
             Content-Type:
               schema:
@@ -1384,15 +1384,15 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '59'
           content:
             application/json:
@@ -1471,7 +1471,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '320'
             Content-Type:
               schema:
@@ -1487,7 +1487,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -1495,11 +1495,11 @@ paths:
                 example: Authorization
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '59'
           content:
             application/json:
@@ -1562,7 +1562,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.8.0
       responses:
         '200':
@@ -1590,7 +1590,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '6221'
             Content-Type:
               schema:
@@ -1606,7 +1606,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -1614,11 +1614,11 @@ paths:
                 example: Authorization
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '57'
           content:
             application/json:
@@ -1967,7 +1967,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
         - name: User-Agent
           in: header
@@ -2041,7 +2041,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '299'
             Content-Type:
               schema:
@@ -2057,7 +2057,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -2065,11 +2065,11 @@ paths:
                 example: Authorization
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '55'
           content:
             application/json:
@@ -2155,7 +2155,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '6461'
             Content-Type:
               schema:
@@ -2171,7 +2171,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -2179,11 +2179,11 @@ paths:
                 example: Authorization
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '58'
           content:
             application/json:
@@ -2523,7 +2523,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.8.0
         - name: XDEBUG_SESSION_START
           in: query
@@ -2556,7 +2556,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '36'
             Content-Type:
               schema:
@@ -2572,7 +2572,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -2580,11 +2580,11 @@ paths:
                 example: Authorization
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '59'
           content:
             application/json:
@@ -2617,11 +2617,6 @@ paths:
             type: string
           description: Application Key
           example: '{{mobile_application_key}}'
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          example: application/json
         - name: Authorization
           in: header
           schema:
@@ -2655,11 +2650,6 @@ paths:
             type: string
           description: Application Key
           example: '{{mobile_application_key}}'
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          example: application/json
         - name: Authorization
           in: header
           schema:
@@ -2799,7 +2789,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
       responses:
         '200':
@@ -2923,7 +2913,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
       responses:
         '200':
@@ -2973,7 +2963,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
       responses:
         '200':
@@ -3015,7 +3005,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
       responses:
         '200':
@@ -3066,7 +3056,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
       responses:
         '200':
@@ -3108,7 +3098,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
       responses:
         '200':
@@ -3150,12 +3140,12 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
         - name: Device-UUID
           in: header
           schema:
-            type: integer
+            type: string
           example: '45641231'
       responses:
         '200':
@@ -3197,12 +3187,12 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
         - name: Device-UUID
           in: header
           schema:
-            type: integer
+            type: string
           example: '45641231'
       responses:
         '200':
@@ -3244,12 +3234,12 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
         - name: Device-UUID
           in: header
           schema:
-            type: integer
+            type: string
           example: '45641231'
       responses:
         '200':
@@ -3298,12 +3288,12 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
         - name: Device-UUID
           in: header
           schema:
-            type: integer
+            type: string
           example: '45641231'
       responses:
         '200':
@@ -3369,7 +3359,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '320'
             Content-Type:
               schema:
@@ -3385,7 +3375,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -3393,11 +3383,11 @@ paths:
                 example: Authorization
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '59'
           content:
             application/json:
@@ -3465,7 +3455,7 @@ paths:
         - name: API-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.3
         - name: XDEBUG_SESSION_START
           in: query
@@ -3498,7 +3488,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '321'
             Content-Type:
               schema:
@@ -3514,7 +3504,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -3522,11 +3512,11 @@ paths:
                 example: Authorization
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '58'
           content:
             application/json:
@@ -3623,7 +3613,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '321'
             Content-Type:
               schema:
@@ -3639,7 +3629,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -3647,11 +3637,11 @@ paths:
                 example: Authorization
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '58'
           content:
             application/json:
@@ -3734,7 +3724,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '320'
             Content-Type:
               schema:
@@ -3750,7 +3740,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -3758,11 +3748,11 @@ paths:
                 example: Authorization
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '59'
           content:
             application/json:
@@ -3822,7 +3812,7 @@ paths:
         - name: API-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.8.0
       responses:
         '200':
@@ -3850,7 +3840,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '320'
             Content-Type:
               schema:
@@ -3866,7 +3856,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -3874,11 +3864,11 @@ paths:
                 example: Authorization
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '59'
           content:
             application/json:
@@ -3938,7 +3928,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
       responses:
         '200':
@@ -3966,7 +3956,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '320'
             Content-Type:
               schema:
@@ -3982,7 +3972,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -3990,11 +3980,11 @@ paths:
                 example: Authorization
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '59'
           content:
             application/json:
@@ -4054,7 +4044,7 @@ paths:
         - name: API-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.3
       responses:
         '200':
@@ -4082,7 +4072,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '321'
             Content-Type:
               schema:
@@ -4098,7 +4088,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -4106,11 +4096,11 @@ paths:
                 example: Authorization
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '58'
           content:
             application/json:
@@ -4201,12 +4191,12 @@ paths:
         - name: Device-UUID
           in: header
           schema:
-            type: integer
+            type: string
           example: '28434235423'
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
       responses:
         '200':
@@ -4271,7 +4261,7 @@ paths:
         - name: Device-UUID
           in: header
           schema:
-            type: integer
+            type: string
           example: '28434235423'
       responses:
         '200':
@@ -4377,7 +4367,7 @@ paths:
         - name: Device-UUID
           in: header
           schema:
-            type: integer
+            type: string
           example: '28434235423'
       responses:
         '200':
@@ -4431,7 +4421,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
       responses:
         '200':
@@ -4481,12 +4471,12 @@ paths:
         - name: Device-UUID
           in: header
           schema:
-            type: integer
+            type: string
           example: '123213'
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
         - name: Brand-Token
           in: header
@@ -4598,7 +4588,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.14.0
       responses:
         '200':
@@ -4649,7 +4639,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.14.0
       responses:
         '200':
@@ -4792,7 +4782,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
       responses:
         '200':
@@ -4922,7 +4912,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.4
         - name: view
           in: query
@@ -4971,11 +4961,11 @@ paths:
                 example: Apache
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '59'
             transfer-encoding:
               schema:
@@ -5946,11 +5936,6 @@ paths:
             type: string
           description: Application Key
           example: '{{mobile_application_key}}'
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          example: application/json
         - name: Authorization
           in: header
           schema:
@@ -6002,11 +5987,6 @@ paths:
             type: string
           description: Application Key
           example: '{{mobile_application_key}}'
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          example: application/json
         - name: Authorization
           in: header
           schema:
@@ -6067,7 +6047,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.6.0
       responses:
         '200':
@@ -6095,7 +6075,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '962'
             Content-Type:
               schema:
@@ -6111,7 +6091,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -6119,11 +6099,11 @@ paths:
                 example: Authorization
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '59'
           content:
             application/json:
@@ -6365,7 +6345,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.3
       responses:
         '200':
@@ -6426,7 +6406,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.3
       responses:
         '200':
@@ -6492,7 +6472,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '320'
             Content-Type:
               schema:
@@ -6508,7 +6488,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -6516,11 +6496,11 @@ paths:
                 example: Authorization
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '59'
           content:
             application/json:
@@ -6570,11 +6550,6 @@ paths:
             type: string
           description: Application Key
           example: '{{mobile_application_key}}'
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          example: application/json
         - name: Authorization
           in: header
           schema:
@@ -6583,7 +6558,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.8.0
       responses:
         '200':
@@ -6635,7 +6610,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
       responses:
         '200':
@@ -6663,7 +6638,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '320'
             Content-Type:
               schema:
@@ -6679,7 +6654,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -6687,11 +6662,11 @@ paths:
                 example: Authorization
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '59'
           content:
             application/json:
@@ -6759,7 +6734,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
       responses:
         '200':
@@ -6775,8 +6750,8 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              example: ''
+              type: string
+              example: 'sdsd'
       parameters:
         - name: Authorization
           in: header
@@ -6807,7 +6782,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
       responses:
         '200':
@@ -6835,7 +6810,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '320'
             Content-Type:
               schema:
@@ -6851,7 +6826,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -6859,11 +6834,11 @@ paths:
                 example: Authorization
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '59'
           content:
             application/json:
@@ -6949,11 +6924,6 @@ paths:
             type: string
           description: Application Key
           example: '{{mobile_application_key}}'
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          example: application/json
         - name: Authorization
           in: header
           schema:
@@ -7028,7 +6998,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
       responses:
         '200':
@@ -7071,15 +7041,10 @@ paths:
             type: string
           description: Application Key
           example: '{{mobile_application_key}}'
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          example: application/json
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
         - name: XDEBUG_SESSION_START
           in: query
@@ -7141,11 +7106,6 @@ paths:
             type: string
           description: Application Key
           example: '{{mobile_application_key}}'
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          example: application/json
         - name: Authorization
           in: header
           schema:
@@ -7154,7 +7114,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
         - name: Device-UUID
           in: header
@@ -7217,7 +7177,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.8.0
         - name: Device-UUID
           in: header
@@ -7255,7 +7215,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '2154'
             Content-Type:
               schema:
@@ -7271,15 +7231,15 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '57'
           content:
             application/json:
@@ -7327,7 +7287,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
         - name: XDEBUG_SESSION_START
           in: query
@@ -7360,7 +7320,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '2154'
             Content-Type:
               schema:
@@ -7376,15 +7336,15 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '57'
           content:
             application/json:
@@ -7465,7 +7425,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '2154'
             Content-Type:
               schema:
@@ -7481,15 +7441,15 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '57'
           content:
             application/json:
@@ -7517,7 +7477,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
+              type: string
               example: "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\r\n  <soap:Body>\r\n    <CreateToken xmlns=\"http://web2pay.com/5.0/2009/11/5.1.0/\">\r\n      <eMerchantID>MenuTest</eMerchantID>\r\n      <ValidationCode>MenuTest1</ValidationCode>\r\n      <TokenSchemeID></TokenSchemeID>\r\n      <TokenExpiryYYMM></TokenExpiryYYMM>\r\n      <CardNumber>5555555555554444</CardNumber>\r\n      <CardExpiryYYMM>2412</CardExpiryYYMM>\r\n      <CardIssueYYMM></CardIssueYYMM>\r\n      <CardIssueNo></CardIssueNo>\r\n      <CardHolderAddress1></CardHolderAddress1>\r\n      <CardHolderCity></CardHolderCity>\r\n      <CardHolderState></CardHolderState>\r\n      <CardHolderPostalCode></CardHolderPostalCode>\r\n      <CardHolderFirstName></CardHolderFirstName>\r\n      <CardHolderLastName></CardHolderLastName>\r\n      <MerchantRef></MerchantRef>\r\n      <UserData1></UserData1>\r\n      <UserData2></UserData2>\r\n      <Online>True</Online>\r\n      <OptionFlags></OptionFlags>\r\n    </CreateToken>\r\n  </soap:Body>\r\n</soap:Envelope>"
       parameters:
         - name: Content-Type
@@ -7528,7 +7488,7 @@ paths:
         - name: SOAPAction
           in: header
           schema:
-            type: number
+            type: string
           example: http://web2pay.com/5.0/2009/11/5.1.0/CreateToken
       responses:
         '200':
@@ -7561,11 +7521,6 @@ paths:
           schema:
             type: string
           example: '{{mobile_application_key}}'
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          example: application/json
       responses:
         '200':
           description: Successful response
@@ -7743,7 +7698,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.3
         - name: Device-UUID
           in: header
@@ -7776,7 +7731,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '962'
             Content-Type:
               schema:
@@ -7792,7 +7747,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -7800,11 +7755,11 @@ paths:
                 example: Authorization
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '59'
           content:
             application/json:
@@ -7948,7 +7903,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.3
       responses:
         '200':
@@ -7976,7 +7931,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '962'
             Content-Type:
               schema:
@@ -7992,7 +7947,7 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             Vary:
               schema:
@@ -8000,11 +7955,11 @@ paths:
                 example: Authorization
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '59'
           content:
             application/json:
@@ -8138,7 +8093,7 @@ paths:
         - name: Api-Version
           in: header
           schema:
-            type: number
+            type: string
           example: 3.7.0
       responses:
         '200':
@@ -8199,7 +8154,7 @@ paths:
                 example: Keep-Alive
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '36'
             Content-Type:
               schema:
@@ -8215,15 +8170,15 @@ paths:
                 example: timeout=5, max=100
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
             X-RateLimit-Limit:
               schema:
-                type: integer
+                type: string
                 example: '60'
             X-RateLimit-Remaining:
               schema:
-                type: integer
+                type: string
                 example: '59'
           content:
             application/json:
@@ -8258,7 +8213,7 @@ paths:
                 example: close
             Content-Length:
               schema:
-                type: integer
+                type: string
                 example: '140'
             Content-Type:
               schema:
@@ -8270,7 +8225,7 @@ paths:
                 example: Mon, 16 Apr 2018 07:51:40 GMT
             Server:
               schema:
-                type: number
+                type: string
                 example: Apache/2.4.18 (Ubuntu)
           content:
             application/json:
