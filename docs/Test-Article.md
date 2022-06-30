@@ -1,4 +1,4 @@
-# h1 Heading 8-)
+# Test markdown file
 
 ## h2 Heading
 
