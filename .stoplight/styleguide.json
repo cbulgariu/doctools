@@ -527,7 +527,7 @@
       "given": [
         "#All_Ref"
       ],
-      "severity": "error",
+      "severity": "warn",
       "then": {
         "function": "refSiblings"
       },
