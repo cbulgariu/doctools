@@ -197,6 +197,7 @@ info:
 
 servers:
     - url: https://owg.acc.app.hd.digital/api/v1
+    - url: https://02a18704-5a73-49a0-acc2-1a96c15da78e.remockly.com
 
 security:
     - api_key: []
