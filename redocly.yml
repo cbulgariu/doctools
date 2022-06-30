@@ -16,4 +16,4 @@ features.openapi:
     languages:
       - lang: curl
       - lang: Python
-  theme: ./openapi/theme.json    
+  theme: ./openapi/theme12.json    
