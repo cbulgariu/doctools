@@ -1032,26 +1032,6 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "Test",
-					"id": "524f59e5-d9fc-4cd7-bc9c-247db9e694ca",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "wwww.googl.com",
-							"host": [
-								"wwww",
-								"googl",
-								"com"
-							]
-						}
-					},
-					"response": []
 				}
 			],
 			"id": "aabbb76f-8904-4a6c-b204-4c10f416543c"
