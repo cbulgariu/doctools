@@ -81,22 +81,7 @@ paths:
       description: Get Configuration on Global level.
       responses:
         '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                properties:
-                  status:
-                    type: string
-                  code:
-                    type: integer
-                    format: int132
-                  data:
-                    properties:
-                      configuration:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/Configuration'
+          $ref: '#/components/responses/200'
   /oauth/tokens:
     parameters:
       - in: header
@@ -1922,3 +1907,20 @@ components:
           type: string
         offset:
           type: string
+  responses:
+    '200':
+      description: Example response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+              '':
+                type: string
+          examples:
+            example-1:
+              value:
+                id: string
+                '': string
