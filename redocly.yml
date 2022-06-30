@@ -1,16 +1,10 @@
 organization: testing_redocly
 apis:
-  core@v2:
-    root: ./openapi/openapi.yaml
+  order_direct@v2:
+    root: ./openapi/order-direct.yaml
     lint:
       rules:
-        no-ambiguous-paths: error
-  external@v1:
-    root: ./openapi/external.yaml
-    labels:
-      - external
-    features.openapi:
-      hideLogo: true
+        no-ambiguous-paths: error  
 
 lint:
   extends:
@@ -22,3 +16,4 @@ features.openapi:
     languages:
       - lang: curl
       - lang: Python
+  theme: ./openapi/theme.json    
