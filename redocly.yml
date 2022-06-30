@@ -17,5 +17,8 @@ features.openapi:
       - lang: curl
       - lang: Python
   theme:
+    colors:
+      primary:
+        main: "red"
     menu:
-      backgroundColor: '#ffffff'
+      backgroundColor: '#8f3f3f'         
