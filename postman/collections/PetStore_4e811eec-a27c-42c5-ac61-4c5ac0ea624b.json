@@ -1032,6 +1032,34 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "New Request",
+					"id": "6606dbba-1d1a-45ca-8dde-c56e10785253",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/pet/:petId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pet",
+								":petId"
+							],
+							"variable": [
+								{
+									"key": "petId",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"id": "aabbb76f-8904-4a6c-b204-4c10f416543c"
@@ -1415,6 +1443,28 @@
 									"body": ""
 								}
 							]
+						},
+						{
+							"name": "Test Request",
+							"id": "a434ee11-25a9-4b78-a72b-795b72173120",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/user/createWithList",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"user",
+										"createWithList"
+									]
+								}
+							},
+							"response": []
 						}
 					],
 					"id": "1d168361-0a7e-4a6d-a3e9-c079121bd0a2"
