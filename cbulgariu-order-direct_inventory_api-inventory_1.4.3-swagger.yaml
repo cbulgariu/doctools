@@ -659,6 +659,21 @@ paths:
       description: 'Get users from the system '
       security:
         - api_key: []
+  /users-new:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+      operationId: get-users-new
+      description: ''
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
 components:
   securitySchemes:
     api_key:
