@@ -1465,6 +1465,27 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Test",
+							"id": "3c62cbfa-55b1-4fa8-81c6-5151c2cd27b4",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/pet",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"pet"
+									]
+								}
+							},
+							"response": []
 						}
 					],
 					"id": "1d168361-0a7e-4a6d-a3e9-c079121bd0a2"
