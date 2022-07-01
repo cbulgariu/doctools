@@ -2751,3 +2751,52 @@ components:
       required:
         - type
         - parameters
+    TestModel:
+      type: object
+      properties:
+        status:
+          type: string
+        code:
+          type: string
+        data:
+          type: object
+          properties:
+            venue_list:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  enabled:
+                    type: string
+                  name:
+                    type: string
+                  configuration:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        api_field_name:
+                          type: string
+                        value:
+                          type: string
+                  updated_at:
+                    type: string
+      x-examples:
+        example-1:
+          status: string
+          code: integer
+          data:
+            venue_list:
+              - id: string
+                enabled: boolean
+                name: string
+                configuration:
+                  - name: string
+                    api_field_name: string
+                    value: string
+                updated_at: string
+      description: ''
