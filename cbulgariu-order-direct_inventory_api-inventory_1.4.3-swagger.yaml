@@ -632,6 +632,33 @@ paths:
       responses:
         '204':
           description: OK - No Response
+  /users:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type:
+                      - string
+                      - integer
+                  name:
+                    type: string
+                  active:
+                    type: boolean
+                required:
+                  - id
+                  - name
+      operationId: get-users
+      description: 'Get users from the system '
+      security:
+        - api_key: []
 components:
   securitySchemes:
     api_key:
