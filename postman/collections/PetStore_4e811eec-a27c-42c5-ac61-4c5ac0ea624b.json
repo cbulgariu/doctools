@@ -1015,47 +1015,21 @@
 				},
 				{
 					"name": "Test",
-					"id": "40fd1524-8c97-428c-a8e0-8a7dce64160e",
+					"id": "848efd97-77f2-40e8-85fd-e18270fa9b87",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "www.google.com",
-							"host": [
-								"www",
-								"google",
-								"com"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "New Request",
-					"id": "6606dbba-1d1a-45ca-8dde-c56e10785253",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/pet/:petId",
+							"raw": "{{baseUrl}}/user/createWithArray",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"pet",
-								":petId"
-							],
-							"variable": [
-								{
-									"key": "petId",
-									"value": null
-								}
+								"user",
+								"createWithArray"
 							]
 						}
 					},
