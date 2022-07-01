@@ -1,685 +1,2584 @@
-openapi: 3.0.0
-info:
-  description: |
-    This is a sample Petstore server.  You can find 
-    out more about Swagger at
-    [http://swagger.io](http://swagger.io) or on
-    [irc.freenode.net, #swagger](http://swagger.io/irc/). But you also can call me at: 
-  version: "1.0.0"
-  title: Swagger Petstore
-  termsOfService: 'http://swagger.io/terms/'
-  contact:
-    email: apiteam@swagger.io
-  license:
-    name: Apache 2.0
-    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-servers:
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/HomeTestApiDoc/ExternalOrder/1.0.0
-  - url: 'https://petstore.swagger.io/v2'
-tags:
-  - name: pet
-    description: Everything about your Pets
-    externalDocs:
-      description: Find out more
-      url: 'http://swagger.io'
-  - name: store
-    description: Access to Petstore orders
-  - name: user
-    description: Operations about user
-    externalDocs:
-      description: Find out more about our store
-      url: 'http://swagger.io'
-paths:
-  /pet:
-    post:
-      tags:
-        - pet
-      summary: Add a new pet to the store
-      operationId: addPet
-      responses:
-        '405':
-          description: Invalid input
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-      requestBody:
-        $ref: '#/components/requestBodies/Pet'
-    put:
-      tags:
-        - pet
-      summary: Update an existing pet
-      operationId: updatePet
-      responses:
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Pet not found
-        '405':
-          description: Validation exception
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-      requestBody:
-        $ref: '#/components/requestBodies/Pet'
-  /pet/findByStatus:
-    get:
-      tags:
-        - pet
-      summary: Finds Pets by status
-      description: Multiple status values can be provided with comma separated strings
-      operationId: findPetsByStatus
-      parameters:
-        - name: status
-          in: query
-          description: Status values that need to be considered for filter
-          required: true
-          explode: true
-          schema:
-            type: array
-            items:
-              type: string
-              enum:
-                - available
-                - pending
-                - sold
-              default: available
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pet'
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pet'
-        '400':
-          description: Invalid status value
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-  /pet/findByTags:
-    get:
-      tags:
-        - pet
-      summary: Finds Pets by tags
-      description: >-
-        Muliple tags can be provided with comma separated strings. Use\ \ tag1,
-        tag2, tag3 for testing.
-      operationId: findPetsByTags
-      parameters:
-        - name: tags
-          in: query
-          description: Tags to filter by
-          required: true
-          explode: true
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pet'
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pet'
-        '400':
-          description: Invalid tag value
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-      deprecated: true
-  '/pet/{petId}':
-    get:
-      tags:
-        - pet
-      summary: Find pet by ID
-      description: Returns a single pet
-      operationId: getPetById
-      parameters:
-        - name: petId
-          in: path
-          description: ID of pet to return
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Pet'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Pet not found
-      security:
-        - api_key: []
-    post:
-      tags:
-        - pet
-      summary: Updates a pet in the store with form data
-      operationId: updatePetWithForm
-      parameters:
-        - name: petId
-          in: path
-          description: ID of pet that needs to be updated
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '405':
-          description: Invalid input
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                name:
-                  description: Updated name of the pet
-                  type: string
-                status:
-                  description: Updated status of the pet
-                  type: string
-    delete:
-      tags:
-        - pet
-      summary: Deletes a pet
-      operationId: deletePet
-      parameters:
-        - name: api_key
-          in: header
-          required: false
-          schema:
-            type: string
-        - name: petId
-          in: path
-          description: Pet id to delete
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Pet not found
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-  '/pet/{petId}/uploadImage':
-    post:
-      tags:
-        - pet
-      summary: uploads an image
-      operationId: uploadFile
-      parameters:
-        - name: petId
-          in: path
-          description: ID of pet to update
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-      requestBody:
-        content:
-          application/octet-stream:
-            schema:
-              type: string
-              format: binary
-  /store/inventory:
-    get:
-      tags:
-        - store
-      summary: Returns pet inventories by status
-      description: Returns a map of status codes to quantities
-      operationId: getInventory
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties:
-                  type: integer
-                  format: int32
-      security:
-        - api_key: []
-  /store/order:
-    post:
-      tags:
-        - store
-      summary: Place an order for a pet
-      operationId: placeOrder
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Order'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Order'
-        '400':
-          description: Invalid Order
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Order'
-        description: order placed for purchasing the pet
-        required: true
-  '/store/order/{orderId}':
-    get:
-      tags:
-        - store
-      summary: Find purchase order by ID
-      description: >-
-        For valid response try integer IDs with value >= 1 and <= 10.\ \ Other
-        values will generated exceptions
-      operationId: getOrderById
-      parameters:
-        - name: orderId
-          in: path
-          description: ID of pet that needs to be fetched
-          required: true
-          schema:
-            type: integer
-            format: int64
-            minimum: 1
-            maximum: 10
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Order'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Order'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Order not found
-    delete:
-      tags:
-        - store
-      summary: Delete purchase order by ID
-      description: >-
-        For valid response try integer IDs with positive integer value.\ \
-        Negative or non-integer values will generate API errors
-      operationId: deleteOrder
-      parameters:
-        - name: orderId
-          in: path
-          description: ID of the order that needs to be deleted
-          required: true
-          schema:
-            type: integer
-            format: int64
-            minimum: 1
-      responses:
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Order not found
-  /user:
-    post:
-      tags:
-        - user
-      summary: Create user
-      description: This can only be done by the logged in user.
-      operationId: createUser
-      responses:
-        default:
-          description: successful operation
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
-        description: Created user object
-        required: true
-  /user/createWithArray:
-    post:
-      tags:
-        - user
-      summary: Creates list of users with given input array
-      operationId: createUsersWithArrayInput
-      responses:
-        default:
-          description: successful operation
-      requestBody:
-        $ref: '#/components/requestBodies/UserArray'
-  /user/createWithList:
-    post:
-      tags:
-        - user
-      summary: Creates list of users with given input array
-      operationId: createUsersWithListInput
-      responses:
-        default:
-          description: successful operation
-      requestBody:
-        $ref: '#/components/requestBodies/UserArray'
-  /user/login:
-    get:
-      tags:
-        - user
-      summary: Logs user into the system
-      operationId: loginUser
-      parameters:
-        - name: username
-          in: query
-          description: The user name for login
-          required: true
-          schema:
-            type: string
-        - name: password
-          in: query
-          description: The password for login in clear text
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          headers:
-            X-Rate-Limit:
-              description: calls per hour allowed by the user
-              schema:
-                type: integer
-                format: int32
-            X-Expires-After:
-              description: date in UTC when token expires
-              schema:
-                type: string
-                format: date-time
-          content:
-            application/json:
-              schema:
-                type: string
-            application/xml:
-              schema:
-                type: string
-        '400':
-          description: Invalid username/password supplied
-  /user/logout:
-    get:
-      tags:
-        - user
-      summary: Logs out current logged in user session
-      operationId: logoutUser
-      responses:
-        default:
-          description: successful operation
-  '/user/{username}':
-    get:
-      tags:
-        - user
-      summary: Get user by user name
-      operationId: getUserByName
-      parameters:
-        - name: username
-          in: path
-          description: The name that needs to be fetched. Use user1 for testing.
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/User'
-        '400':
-          description: Invalid username supplied
-        '404':
-          description: User not found
-    put:
-      tags:
-        - user
-      summary: Updated user
-      description: This can only be done by the logged in user.
-      operationId: updateUser
-      parameters:
-        - name: username
-          in: path
-          description: name that need to be updated
-          required: true
-          schema:
-            type: string
-      responses:
-        '400':
-          description: Invalid user supplied
-        '404':
-          description: User not found
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
-        description: Updated user object
-        required: true
-    delete:
-      tags:
-        - user
-      summary: Delete user
-      description: This can only be done by the logged in user.
-      operationId: deleteUser
-      parameters:
-        - name: username
-          in: path
-          description: The name that needs to be deleted
-          required: true
-          schema:
-            type: string
-      responses:
-        '400':
-          description: Invalid username supplied
-        '404':
-          description: User not found
-externalDocs:
-  description: Find out more about Swagger
-  url: 'http://swagger.io'
-components:
-  schemas:
-    Order:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        petId:
-          type: integer
-          format: int64
-        quantity:
-          type: integer
-          format: int32
-        shipDate:
-          type: string
-          format: date-time
-        status:
-          type: string
-          description: Order Status
-          enum:
-            - placed
-            - approved
-            - delivered
-        complete:
-          type: boolean
-          default: false
-      xml:
-        name: Order
-    Category:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-      xml:
-        name: Category
-    User:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        username:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
-        email:
-          type: string
-        password:
-          type: string
-        phone:
-          type: string
-        userStatus:
-          type: integer
-          format: int32
-          description: User Status
-      xml:
-        name: User
-    Tag:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-      xml:
-        name: Tag
-    Pet:
-      type: object
-      required:
-        - name
-        - photoUrls
-      properties:
-        id:
-          type: integer
-          format: int64
-        category:
-          $ref: '#/components/schemas/Category'
-        name:
-          type: string
-          example: doggie
-        photoUrls:
-          type: array
-          xml:
-            name: photoUrl
-            wrapped: true
-          items:
-            type: string
-        tags:
-          type: array
-          xml:
-            name: tag
-            wrapped: true
-          items:
-            $ref: '#/components/schemas/Tag'
-        status:
-          type: string
-          description: pet status in the store
-          enum:
-            - available
-            - pending
-            - sold
-      xml:
-        name: Pet
-    ApiResponse:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        type:
-          type: string
-        message:
-          type: string
-  requestBodies:
-    Pet:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Pet'
-        application/xml:
-          schema:
-            $ref: '#/components/schemas/Pet'
-      description: Pet object that needs to be added to the store
-      required: true
-    UserArray:
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/User'
-      description: List of user object
-      required: true
-  securitySchemes:
-    petstore_auth:
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: 'http://petstore.swagger.io/oauth/dialog'
-          scopes:
-            'write:pets': modify pets in your account
-            'read:pets': read your pets
-    api_key:
-      type: apiKey
-      name: api_key
-      in: header
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Order Direct - Inventory API",
+    "description" : "# Policies and Conventions 1.33.3\nThis section gives you the basic information needed to use our food service inventory API.\n\n## Authentication\nAll requests must be authenticated using an API key via the `key` query parameter. <pre>GET https://owg.acc.app.hd.digital/api/v1/inventory/restaurant?<b>key=API_KEY</b></pre> The API key should be kept secret.\n\n## Serialization + Compression\norderDirect only accepts data in JSON format. To minimize traffic on the inventory endpoints, we require gzip encoding of the payloads for all inventory batch operations.  \n\nIn ACC + STG environments for testing and onboarding purposes you can also send single uncompressed entities via curl/postman/paw etc. up to the `4MB input limit`\n\n## Content Headers\nFor all requests that include a request body, these headers are required:: <pre>content-type: application/json, content-encoding: gzip (for batch operations)</pre>\n\n## PUT Requests\nGenerally, all `PUT` operations behave as true RESTful `PUT`, in which entire existing objects are overwritten with the provided content. A non existing object will not be created by this call.\n\n## Top-level entities\nRestaurant, Menu, Service and Deal should always be top-level entities and must define the @id property.\n\n## Entity examples\nBasic and advanced samples for the Restaurant, Menu and Service models can be found in the folder `/inventory_samples` next to this openAPI specification\n\n## DateTime and Time values:\n* `DateTime` must include the date and the time, as well as the timezone:: YYYY-MM-DDTHH:MM[∓HH:MM|Z] <pre>2021-05-01T06:30+02:00 // UTC plus 2 hours 2021-05-01T06:30Z  // UTC timezone. The optional \"Z\" suffix represents the UTC timezone.</pre>\n* `Time` is the local time for a given restaurant or service location's timezone. Format:: THH:MM <pre>T08:08 // 8:08AM</pre>\n* the formats are based on the schema.org types (ISO 8601) and seconds (:SS) are optional\n\n## Null values\nDo not use null values, if a property does not have a value, leave out the whole property.\n\n## IDs\nIn all inputs, the id is the entity `@id` property and not our internal ID. So when calling `/inventory/restaurant/{id}`, the id is the `@id` the user provided before, when creating the restaurant.  \n\nWhen accessing the endpoints, the Slashes `/` contained in the entity @ids need to be encoded as `%2F`  \n<pre>GET /inventory/restaurant/r%2FChIJ13mR2PMhv0cRKac2RnCMZhk  \nGET /inventory/restaurant/r%2FChIJ13mR2PMhv0cRKac2RnCMZhk/service/r%2FChIJ13mR2PMhv0cRKac2RnCMZhk%2Fs_d%2F85</pre>  \n\nYou have to set the \"@id\" property for the following objects when you create them. To provide the restaurant related entities with an unique @id, the restaurant's \"Google_place_ID\" has to be used when building the @id strings. Please use the following schema for valid @id's:\n\n* Restaurant: \"r/{google_place_ID}\"\n\n* Services:  \ndelivery: \"{restaurant_ID}/s_d/{your_ID}\"  \ntakeout:  \"{restaurant_ID}/s_t/{your_ID}\"\n\n* Menu: \"{restaurant_ID}/m/{your_ID}\"\n\n* MenuSection: \"{restaurant_ID}/ms/{your_ID}\"\n\n* MenuItem: \"{restaurant_ID}/mi/{your_ID}\"\n\n* AddOnMenuSection: \"{restaurant_ID}/ms_a/{your_ID}\"\n\n* AddOnMenuItem: \"{restaurant_ID}/mi_a/{your_ID}\"\n\n* Offer (sku instead of @ID): \"{menuItem_ID}/o/{your_ID}\"\n\nThe top level entity \"deal\" is stored independently of a restaurant, because one Deal can be used for multiple restaurants.  \n\n* Deal: \"d/{your_ID}\"\n\n## Object References\nObject References are an extension to the schema.org structures to bring down the overall JSON data size, avoid duplication and deep nesting.  \nTo create a link to the original object within your inventory, instead of the object itself you place a reference which consists of just the @id + @type with the suffix “…Reference”.  \nReferences are **mandatory** in `Restaurant.hasMenu` and `Service.provider` + `service.hasOfferCatalog` and optional in the Menu entity.  \nEspecially on the task to provide a slim Menu, references can be used with all Menu related objects that have an @id, e.g. to re-use MenuItems or AddOns.\n\n## Google Place ID\nIf you don't have the Google_place_ID for your restaurants yet, you can get it via the Google Places API by searching with a at best very specific textquery (encode whitespaces with  %20)::\n\n  <a href=\"https://developers.google.com/places/web-service/search#FindPlaceRequests\">https://developers.google.com/places/web-service/search#FindPlaceRequests</a>\n\nExample: <pre>GET https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=Wessburger%20Wesseling&inputtype=textquery&fields=name,place_id&<b>key=PLACES_API_KEY</b></pre>\n\nResponse: <pre>{\"candidates\":[{\"name\":\"Wessburger\", \"place_id\":\"ChIJ13mR2PMhv0cRKac2RnCMZhk\"}],\"status\":\"OK\"}</pre>\nIf you get more than one matching canditate, specify your search query or implement further verification which of the received places is the restaurant you are looking for.\nMissing information in your restaurant master data like for example \"adressRegion\" (federal state) can also be fetched via a \"FindPlaceRequest\" to the Google Places API.\n\n## Status Codes\n* `200 OK`\n   * Request was successful, check response data.\n\n* `201 Created`\n   * Provided entity was successfully created.\n\n* `204 OK - No Response`\n   * Operation was successful. No response given to limit traffic.\n\n* `400 Bad Request`\n    * A parameter is invalid, or a required parameter is missing. This includes the case where no API key is provided and the case where a resource ID is specified incorrectly in a path.\n    * This status is if any of the response errors are of type `requestError`.\n\n* `401 Unauthorized`\n    * The API key provided is invalid.\n\n* `403 Client Error`\n    * The request is forbidden for the provided API key.\n\n* `404 Not Found`\n    * The endpoint does not exist.\n\n* `503 Server Error`\n    * Service Temporarily Unavailable.\n",
+    "version" : "1.33.3"
+  },
+  "servers" : [ {
+    "url" : "https://owg.acc.app.hd.digital/api/v1"
+  } ],
+  "security" : [ {
+    "api_key" : [ ]
+  } ],
+  "tags" : [ {
+    "name" : "Restaurant"
+  }, {
+    "name" : "Menu"
+  }, {
+    "name" : "Service"
+  }, {
+    "name" : "Deal"
+  }, {
+    "name" : "SLA Enforcement"
+  } ],
+  "paths" : {
+    "/inventory/restaurant" : {
+      "get" : {
+        "tags" : [ "Restaurant" ],
+        "summary" : "list all restaurants",
+        "description" : "This call will return a complete list of uploaded restaurants.",
+        "operationId" : "listRestaurants",
+        "responses" : {
+          "200" : {
+            "description" : "Complete list of restaurants",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ErrorModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Restaurant" ],
+        "summary" : "add one restaurant",
+        "description" : "This call will add one restaurant.",
+        "operationId" : "addRestaurants",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/Restaurant"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Created"
+          },
+          "400" : {
+            "description" : "Restaurant with id {id} already exists"
+          }
+        }
+      }
+    },
+    "/inventory/restaurant/{offset}" : {
+      "get" : {
+        "tags" : [ "Restaurant" ],
+        "summary" : "return one restaurant",
+        "description" : "This call will return a restaurant by its ID.",
+        "operationId" : "viewRestaurant",
+        "parameters" : [ {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "The number of items to skip before returning the results",
+          "schema" : {
+            "minimum" : 0,
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Returns requested restaurant details",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResponseRestaurant"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Restaurant" ],
+        "summary" : "update one restaurant",
+        "description" : "This call will update the restaurant referenced by the ID.",
+        "operationId" : "updateRestaurant",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "urgent",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "boolean",
+            "default" : false
+          }
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/Restaurant"
+        },
+        "responses" : {
+          "204" : {
+            "description" : "OK - No Response"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Restaurant" ],
+        "summary" : "delete all data for a restaurant",
+        "description" : "This call will delete all entities (Service/Menu/Restaurant) referenced by the provided restaurant ID.\n",
+        "operationId" : "deleteRestaurant",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "OK - No Response"
+          }
+        }
+      }
+    },
+    "/inventory/restaurant/{restaurantId}/menu" : {
+      "get" : {
+        "tags" : [ "Menu" ],
+        "summary" : "list all menus for a restaurant",
+        "description" : "This call will list all menus for the restaurant referenced by the ID.",
+        "operationId" : "listMenus",
+        "parameters" : [ {
+          "name" : "restaurantId",
+          "in" : "path",
+          "description" : "Restaurant ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "List of menus",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ResponseMenu"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Menu" ],
+        "summary" : "add menu for a restaurant",
+        "description" : "This call will add the given menu to the restaurant referenced by the ID.",
+        "operationId" : "addMenu",
+        "parameters" : [ {
+          "name" : "restaurantId",
+          "in" : "path",
+          "description" : "Restaurant ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/Menu"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Created"
+          }
+        }
+      }
+    },
+    "/inventory/restaurant/{restaurantId}/menu/{menuId}" : {
+      "get" : {
+        "tags" : [ "Menu" ],
+        "summary" : "return a menu of a restaurant",
+        "description" : "This call will return a menu of a restaurant. Both are being referenced by their IDs.",
+        "operationId" : "viewMenu",
+        "parameters" : [ {
+          "name" : "restaurantId",
+          "in" : "path",
+          "description" : "Restaurant Id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "menuId",
+          "in" : "path",
+          "description" : "Menu Id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResponseMenu"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Menu" ],
+        "summary" : "update a menu of a restaurant",
+        "description" : "This call will update a menu of a restaurant. Both are being referenced by their IDs.",
+        "operationId" : "updateMenu",
+        "parameters" : [ {
+          "name" : "restaurantId",
+          "in" : "path",
+          "description" : "Restaurant Id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "menuId",
+          "in" : "path",
+          "description" : "Menu Id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "urgent",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "boolean",
+            "default" : false
+          }
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/Menu"
+        },
+        "responses" : {
+          "204" : {
+            "description" : "OK - No Response"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Menu" ],
+        "summary" : "delete a menu",
+        "description" : "This call will delete a specific menu of a restaurant\n",
+        "operationId" : "deleteMenu",
+        "parameters" : [ {
+          "name" : "restaurantId",
+          "in" : "path",
+          "description" : "Restaurant Id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "menuId",
+          "in" : "path",
+          "description" : "Menu Id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "OK - No Response"
+          }
+        }
+      }
+    },
+    "/inventory/restaurant/{restaurantId}/service" : {
+      "get" : {
+        "tags" : [ "Service" ],
+        "summary" : "lists all services for a restaurant",
+        "description" : "This call will list all services for the restaurant referenced by the ID.",
+        "operationId" : "listServices",
+        "parameters" : [ {
+          "name" : "restaurantId",
+          "in" : "path",
+          "description" : "Restaurant ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "List of services",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ResponseService"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Service" ],
+        "summary" : "add service for a restaurant",
+        "description" : "This call will add the given service to the restaurant referenced by the ID.",
+        "operationId" : "addService",
+        "parameters" : [ {
+          "name" : "restaurantId",
+          "in" : "path",
+          "description" : "Restaurant ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/Service"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Created"
+          }
+        }
+      }
+    },
+    "/inventory/restaurant/{restaurantId}/service/{serviceId}" : {
+      "get" : {
+        "tags" : [ "Service" ],
+        "summary" : "return a service of a restaurant",
+        "description" : "This call will return a service of a restaurant. Both are being referenced by their IDs.",
+        "operationId" : "viewService",
+        "parameters" : [ {
+          "name" : "restaurantId",
+          "in" : "path",
+          "description" : "Restaurant Id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "serviceId",
+          "in" : "path",
+          "description" : "Service Id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResponseService"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Service" ],
+        "summary" : "update a service of a restaurant",
+        "description" : "This call will update a service of a restaurant. Both are being referenced by their IDs.",
+        "operationId" : "updateService",
+        "parameters" : [ {
+          "name" : "restaurantId",
+          "in" : "path",
+          "description" : "Restaurant Id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "serviceId",
+          "in" : "path",
+          "description" : "Service Id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "urgent",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "boolean",
+            "default" : false
+          }
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/Service"
+        },
+        "responses" : {
+          "204" : {
+            "description" : "OK - No Response"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Service" ],
+        "summary" : "delete a service",
+        "description" : "This call will delete a specific service of a restaurant\n",
+        "operationId" : "deleteService",
+        "parameters" : [ {
+          "name" : "restaurantId",
+          "in" : "path",
+          "description" : "Restaurant Id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "serviceId",
+          "in" : "path",
+          "description" : "Service Id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "OK - No Response"
+          }
+        }
+      }
+    },
+    "/inventory/deal" : {
+      "get" : {
+        "tags" : [ "Deal" ],
+        "summary" : "lists all deals",
+        "description" : "This call will list all uploaded deals.",
+        "operationId" : "listDeals",
+        "responses" : {
+          "200" : {
+            "description" : "Complete list of deals",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ResponseDeal"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Deal" ],
+        "summary" : "add deal",
+        "description" : "This call will add the given deal to your list of deals.",
+        "operationId" : "addDeal",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/Deal"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Created"
+          }
+        }
+      }
+    },
+    "/inventory/deal/{dealId}" : {
+      "get" : {
+        "tags" : [ "Deal" ],
+        "summary" : "return deal",
+        "description" : "This call will return the deal referenced by the ID.",
+        "operationId" : "viewDeal",
+        "parameters" : [ {
+          "name" : "dealId",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResponseDeal"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Deal" ],
+        "summary" : "update deal",
+        "description" : "This call will update the deal referenced by the ID.",
+        "operationId" : "updateDeal",
+        "parameters" : [ {
+          "name" : "dealId",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "urgent",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "boolean",
+            "default" : false
+          }
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/Deal"
+        },
+        "responses" : {
+          "204" : {
+            "description" : "OK - No Response"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Deal" ],
+        "summary" : "delete a deal",
+        "description" : "This call will delete a specific deal entity\n",
+        "operationId" : "deleteDeal",
+        "parameters" : [ {
+          "name" : "dealId",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "OK - No Response"
+          }
+        }
+      }
+    },
+    "/sla-enforcement/enable" : {
+      "get" : {
+        "tags" : [ "SLA Enforcement" ],
+        "summary" : "Re-Enable disabled API access",
+        "description" : "This call will trigger the process for restoring your API access in case it has been disabled due to SLA violations.\n",
+        "operationId" : "restoreAccess",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/sla-enforcement/enable/{restaurantId}" : {
+      "get" : {
+        "tags" : [ "SLA Enforcement" ],
+        "summary" : "Re-Enable disabled restaurant",
+        "description" : "This call will re-enable a restaurant in the orderdirect system in case it has been disabled due to SLA violations.\n",
+        "operationId" : "restoreRestaurant",
+        "parameters" : [ {
+          "name" : "restaurantId",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "AddOnMenuItem" : {
+        "required" : [ "@id", "@type", "name" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "AddOnMenuItem" ]
+          },
+          "@id" : {
+            "type" : "string",
+            "description" : "A unique identifier of the add-on menu item.\n"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "The text that can identify the AddOnMenuItem when a user is browsing the menu.\n"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Description of the add-on menu item.\n"
+          },
+          "image" : {
+            "type" : "string",
+            "description" : "The Url for an image of the add-on menu item.\nImage Guidelines::\nAspect Ratio 3:2\nmin Resolution 600 x 400 px. 72. Dpi\nRecommended Resolution 1400 x 960 px. 72. dpi\n"
+          },
+          "offers" : {
+            "type" : "array",
+            "description" : "Mutually exclusive with AddOnMenuItem.hasMenuItemOptions. One or many offers to provide the AddOnMenuItem. Describes when + at what price the AddOnMenuItem is available. Only one offer should be valid at a particular point in time. You can have many valid offers when the price/availability can change. Should the add-on or item differ through a base attribute, a variation on the add-on item itself (e.g. small, medium, + large fries as an add-on), use the hasMenuItemOption property. The default for Offer.eligibleQuantity is min of 0, maximum of 1.\n",
+            "items" : {
+              "$ref" : "#/components/schemas/OfferMenuItem"
+            }
+          },
+          "hasMenuItemOptions" : {
+            "type" : "array",
+            "description" : "Mutually exclusive with AddOnMenuItem.offers.   Array of base attributes, a variation on the add-on item itself (e.g. small, medium, + large fries as an add-on), for the add-on menu item. Use options to specify various variations available for the add-on menu item. There are two scenarios where this can happen:: The base variation is on the add-on item itself (e.g. small, medium, + large fries as add-on) The base variation for the menu item the add-on is associated with (e.g. extra cheese as an add-on for a large pizza)\n",
+            "items" : {
+              "$ref" : "#/components/schemas/AddOnMenuItemOption"
+            }
+          },
+          "suitableForDiet" : {
+            "type" : "array",
+            "description" : "The dish complies with the described dietary restriction (e.g. \"GlutenFreeDiet\", \"VeganDiet\", etc.). This is an enumerated list of possible values.\n",
+            "items" : {
+              "$ref" : "#/components/schemas/RestrictedDiet"
+            }
+          },
+          "nutrition" : {
+            "$ref" : "#/components/schemas/NutritionInformation"
+          },
+          "menuAddOn" : {
+            "type" : "array",
+            "description" : "The AddOnMenuItem can have a menu section comprised of allowed items that can be added as an add-on.\n",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/AddOnMenuSection"
+              }, {
+                "$ref" : "#/components/schemas/AddOnMenuSectionReference"
+              } ]
+            }
+          }
+        },
+        "description" : "A food or drink addOn to a normal menuItem that can be optionally selected by the customer.\n"
+      },
+      "AddOnMenuItemReference" : {
+        "required" : [ "@id", "@type" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "AddOnMenuItemReference" ]
+          },
+          "@id" : {
+            "type" : "string",
+            "description" : "A unique identifier of the linked AddOnMenuItem.\n"
+          }
+        },
+        "description" : "A reference to an existing AddOnMenuItem\n"
+      },
+      "AddOnMenuItemOption" : {
+        "required" : [ "@type", "offers", "value" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "MenuItemOption" ]
+            }
+          },
+          "value" : {
+            "type" : "array",
+            "description" : "An Array defining the available types of the option for the AddOn. Note, that in contrast to a menuItem, here an addidional option type can be added for pizzas: \"PIZZA_SIDE\" to define on which side the AddOn should be placed\n",
+            "items" : {
+              "$ref" : "#/components/schemas/AddOnMenuItemOptionPropertyValue"
+            }
+          },
+          "offers" : {
+            "type" : "array",
+            "description" : "One or more offers to provide the MenuItemOption. Describes when + at what price the MenuItemOption is available. Only one offer should be valid at a particular point in time. You can have many valid offers when the price/availability changes. Don't use Offer.eligibleQuantity. MenuItemOption is mutually exclusive, so Offer.eligibleQuantity will be ignored when provided.\n",
+            "items" : {
+              "$ref" : "#/components/schemas/OfferMenuItem"
+            }
+          },
+          "suitableForDiet" : {
+            "type" : "array",
+            "description" : "An enumerated list that indicates which diets the AddOn complies with the described dietary restriction (e.g. \"http://schema.org/GlutenFreeDiet\", \"http://schema.org/VeganDiet\", etc).\n",
+            "items" : {
+              "$ref" : "#/components/schemas/RestrictedDiet"
+            }
+          },
+          "nutrition" : {
+            "$ref" : "#/components/schemas/NutritionInformation"
+          }
+        },
+        "description" : "An option to represent choices that a user would be required to make when selecting an AddOn. The user must select an option, otherwise the order is considered invalid. For example, choosing small, medium, or large for the addOn.\nThis option on an AddOn is also used to automatically select AddOn sizes that are bound to sizes/options of the main menuItem.\n"
+      },
+      "AddOnMenuItemOptionPropertyValue" : {
+        "required" : [ "@type", "name", "value" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "PropertyValue" ]
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "\"APPLICABLE_ITEM_OPTION\": An option for the addOn that is only applicable when used with the MenuItem with the respective \"SIZE/OPTION\". \"PIZZA_SIDE\": Specific to pizzas, this add-on is only valid for a portion/whole pizza (like mushroom toppings on the left side, right side, or whole pizza). This Pizza side option type can be use in addition to one of the others on AddOns. \"SIZE\": An option to designate the size of the add-on (like large fries as an add-on for a meal combo). \"OPTION\": Any variation other than size. If you can't distinguish between \"SIZE\" and \"OPTION\", then use \"OPTION\".\n",
+            "enum" : [ "APPLICABLE_ITEM_OPTION", "PIZZA_SIDE", "SIZE", "OPTION" ]
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "There are 4 options, depending on the option type defined with the above \"name\" property, how this \"value\" needs to be defined: name = \"APPLICABLE_ITEM_OPTION\" => This value has to be present in one of the corresponding \"OPTION/SIZE\" choices for the parent MenuItem's menuItemOptions. name = \"PIZZA_SIDE\" =>: The corresponding value here should be \"PIZZA_SIDE_LEFT\", \"PIZZA_SIDE_RIGHT\", or \"PIZZA_SIDE_WHOLE\" for a pizza. In case of a new mandatory selection for the AddOn you can define the UI display name. Examples: name = \"SIZE\" => value = \"medium\", \"large\", etc. name = \"OPTION\" => value = \"hot\", \"cold\", etc.\n"
+          }
+        }
+      },
+      "AddOnMenuSection" : {
+        "required" : [ "@id", "@type", "name" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "AddOnMenuSection" ]
+          },
+          "@id" : {
+            "type" : "string",
+            "description" : "Unique identifier of the menu section.\n"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "The text that can identify the AddOnMenuSection when a user is browsing the menu.\n"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Description of the menu section.\n"
+          },
+          "eligibleQuantity" : {
+            "$ref" : "#/components/schemas/QuantitativeValue"
+          },
+          "image" : {
+            "type" : "string",
+            "description" : "The Url for an image of the menu section.\n"
+          },
+          "hasMenuItem" : {
+            "type" : "array",
+            "description" : "Add-on menu items contained in an AddOnMenuSection.\n",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/AddOnMenuItem"
+              }, {
+                "$ref" : "#/components/schemas/AddOnMenuItemReference"
+              } ]
+            }
+          },
+          "offers" : {
+            "type" : "array",
+            "description" : "Use Offers to define the availability of the AddOn section. Only one Offer should be valid at a particular point in time.\n",
+            "items" : {
+              "$ref" : "#/components/schemas/OfferMenuSection"
+            }
+          },
+          "hasMenuSection" : {
+            "type" : "array",
+            "description" : "A logical sub-grouping of the add-on menu (e.g. Dinner, Appetizers, or Fish dishes).\n",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/AddOnMenuSection"
+              }, {
+                "$ref" : "#/components/schemas/AddOnMenuSectionReference"
+              } ]
+            }
+          },
+          "numberOfFreeAddOns" : {
+            "type" : "number",
+            "description" : "The number of free AddOnMenuItem allowed. Each AddOnMenuItem in the AddOnMenuSection is priced. However, users can select up to numberOfFreeAddOns free of charges. The costs of the most expensive AddOnMenuItem selected will be voided while, when applicable, the additional AddOnMenuItem selected will be charged normally. The default value is 0.\n"
+          },
+          "defaultOption" : {
+            "type" : "array",
+            "description" : "A list of @id referencing AddOnMenuItem to be pre-selected by default for users in the AddOnMenuSection. Users can change the final selections. when defaultOption is not specified, no AddOnMenuItem is pre-selected. The AddOnMenuItem object in defaultOption can only have @id which references an AddOnMenuItem existing in hasMenuItem of the AddOnMenuSection. The number of defaultOption must be less or equal to the maximum eligibleQuantity of the AddOnMenuSection.\n",
+            "items" : {
+              "$ref" : "#/components/schemas/AddOnMenuItemReference"
+            }
+          }
+        }
+      },
+      "AddOnMenuSectionReference" : {
+        "required" : [ "@id", "@type" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "AddOnMenuSectionReference" ]
+          },
+          "@id" : {
+            "type" : "string",
+            "description" : "A unique identifier of the linked AddOnMenuSection.\n"
+          }
+        },
+        "description" : "A reference to an existing AddOnMenuSection\n"
+      },
+      "AdvanceServiceDeliveryHoursSpecification" : {
+        "required" : [ "@type", "advanceBookingRequirement", "closes", "opens", "serviceTimeInterval" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "AdvanceServiceDeliveryHoursSpecification" ]
+          },
+          "validFrom" : {
+            "type" : "string",
+            "description" : "The beginning date from which users' advance orders can be fulfilled. The validFrom + validThrough properties must be absent or present together. when the type is specified as a specialOpeningHoursSpecification at the Service level, the validFrom property in AdvanceServiceDeliveryHoursSpecification is required. For example, when the hours given are good for all of 2021, you might set validFrom to \"2021-01-01T00:00+02:00\" + validThrough to \"2021-12-31T23:59:59+02:00\". For more information, see DateTime + Time formats.\n"
+          },
+          "validThrough" : {
+            "type" : "string",
+            "description" : "The ending date beyond which users' advance orders can no longer be fulfilled. The validFrom + validThrough properties must be absent or present together. when the type is specified as a specialOpeningHoursSpecification at the Service level, the validThrough property in AdvanceServiceDeliveryHoursSpecification is required. The time for validThrough is exclusive. For example, when that time is set to 6PM, the time is valid up to 5:59:59PM. For example, when the hours given are good for all of 2021, you might set validFrom to \"2021-01-01T00:00+02:00\" + validThrough to \"2021-12-31T23:59:59+02:00\". For more information, see DateTime + Time formats.\n"
+          },
+          "opens" : {
+            "type" : "string",
+            "description" : "Applies to delivery or takeout slots. The specific time of day starting from which users' advance orders can be fulfilled. For example, 6:30 AM might be given as \"T06:30\". The time must be specified in the local time for service. Don't include a timezone in an opens value. when a timezone is specified, Google ignores the information. For more information, see DateTime + Time formats.\n"
+          },
+          "closes" : {
+            "type" : "string",
+            "description" : "Applies to delivery or takeout slots. The specific time of day beyond which users' advance orders can't be fulfilled. For example, 9:00PM might be given as \"T21:00\". closes> is exclusive, so setting it to 9:00PM for a serviceTimeInterval of 15 minutes means that the last available time slot starts at 8:45PM. Time slots crossing midnight are supported within one specification, just set the closes value to the correct time on the next day. The time must be specified in the local time for service. Don't include a timezone in a closes value. when a timezone is specified, Google ignores the information. For more information, see DateTime + Time formats.\n"
+          },
+          "dayOfWeek" : {
+            "$ref" : "#/components/schemas/DayOfWeek"
+          },
+          "serviceTimeInterval" : {
+            "type" : "string"
+          },
+          "advanceBookingRequirement" : {
+            "$ref" : "#/components/schemas/AdvanceBookingTimeQuantitativeValue"
+          }
+        }
+      },
+      "AdditiveDetails" : {
+        "required" : [ "@type" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "AdditiveDetails" ]
+          },
+          "additiveName" : {
+            "type" : "string",
+            "description" : "Name of the additive.\n"
+          },
+          "additiveLevelOfContainment" : {
+            "type" : "string",
+            "description" : "Containment code per <a href=\"https://www.gs1.org/voc/LevelOfContainmentCode\">gs1:LevelOfContainmentCode</a>. For example \"http://gs1.org/voc/LevelOfContainmentCode-CONTAINS\", \"http://gs1.org/voc/LevelOfContainmentCode-FREE_FROM\" or \"http://gs1.org/voc/LevelOfContainmentCode-MAY_CONTAIN\".\n"
+          }
+        },
+        "description" : "The additives of the dish per <a href=\"https://www.gs1.org/voc/AdditiveDetails\">gs1:AdditiveDetails</a>. To use this type, add 'FoodBeverageTobaccoProduct' to the type of the appropriate MenuItem or MenuItemOption. (e.g. \"@type\": [\"MenuItem\", \"FoodBeverageTobaccoProduct\"])\n"
+      },
+      "AllergenDetails" : {
+        "required" : [ "@type" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "AllergenDetails" ]
+          },
+          "allergenType" : {
+            "type" : "string",
+            "description" : "Type of allergen per <a href=\"https://www.gs1.org/voc/AllergenTypeCode\">gs1:AllergenTypeCode</a>. For example \"http://gs1.org/voc/AllergenTypeCode-PEANUTS\"\n"
+          },
+          "allergenLevelOfContainmentCode" : {
+            "type" : "string",
+            "description" : "Containment code per <a href=\"https://www.gs1.org/voc/LevelOfContainmentCode\">gs1:LevelOfContainmentCode</a>. For example \"http://gs1.org/voc/LevelOfContainmentCode-CONTAINS\", \"http://gs1.org/voc/LevelOfContainmentCode-FREE_FROM\" or \"http://gs1.org/voc/LevelOfContainmentCode-MAY_CONTAIN\".\n"
+          }
+        },
+        "description" : "Allergens of the dish per <a href=\"https://www.gs1.org/voc/AllergenDetails\">gs1:AllergenDetails</a>. To use this type, add 'FoodBeverageTobaccoProduct' to the type of the appropriate MenuItem or MenuItemOption (e.g. \"@type\": [\"MenuItem\", \"FoodBeverageTobaccoProduct\"])\n"
+      },
+      "Deal" : {
+        "required" : [ "@id", "@type", "category", "identifier", "termsOfService", "validFrom", "validThrough" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "DiscountFoodOffer" ]
+          },
+          "@id" : {
+            "type" : "string",
+            "description" : "The unique identifier for the Deal \"d/{your_ID}\"\n"
+          },
+          "identifier" : {
+            "type" : "string",
+            "description" : "Unique deal ID. For example, \"WESS23” or “BURGEROFF25”.\nThis ID must uniquely identify the deal in your promotion system. Google sends you this identifier in the promotions.coupon field of a CheckoutRequest for validation.\n"
+          },
+          "applicableFulfillmentMethod" : {
+            "type" : "array",
+            "description" : "The service that this deal is applicable to.\nDefault assumes a deal applicable to all.\n",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "DELIVERY", "TAKEOUT" ]
+            }
+          },
+          "eligibleMaxNumberOfPastSuccessfulOrders" : {
+            "type" : "number",
+            "description" : "This offer is only eligible when the user has less than or equal to this number of past successful orders.\n"
+          },
+          "validFrom" : {
+            "type" : "string",
+            "description" : "The date + time (including the timezone) when the discount specified becomes valid. For example, when the discount is availabe for all of 2021, you might set validFrom to \"2021-01-01T00:00+02:00\" + validThrough to \"2021-12-31T23:59:59+02:00\". For more information, see DateTime + Time formats.\n"
+          },
+          "validThrough" : {
+            "type" : "string",
+            "description" : "Date and time after which the discount becomes invalid. For example the end of an offer, salary period, or a period of opening hours. For example, when the discount is availabe for all of 2021, you might set validFrom to \"2021-01-01T00:00+02:00\" + validThrough to \"2021-12-31T23:59:59+02:00\".\n"
+          },
+          "availableDay" : {
+            "type" : "array",
+            "description" : "Days of the week that the item is available.\n",
+            "items" : {
+              "$ref" : "#/components/schemas/DayOfWeek"
+            }
+          },
+          "availabilityStarts" : {
+            "type" : "string",
+            "description" : "The daytime from which the discount is available. Example: 10 AM CEST -> \"T10:00\".   The time must be specified in the local time for the restaurant.   For more information, see 'DateTime and Time values' in the introduction of this document.\n"
+          },
+          "availabilityEnds" : {
+            "type" : "string",
+            "description" : "The daytime, when the discount is not available anymore. the time is exclusive, so when it is set to 6PM, the last discount can be granted at 5:59:59PM. Example: \"T18:00\".   The time must be specified in the local time for the restaurant.   For more information, see 'DateTime and Time values' in the introduction of this document.\n"
+          },
+          "isDisabled" : {
+            "type" : "boolean",
+            "description" : "This overrides other validity checks. The default value is false. When is_disabled is true, the deal won’t be applied.\n"
+          },
+          "category" : {
+            "type" : "string",
+            "description" : "Category of deal to apply the discount to. The category can be the whole cart total, service fees, or delivery fees.\n",
+            "enum" : [ "CART_OFF", "DELIVERY_OFF", "SERVICE_OFF" ]
+          },
+          "discountPercentage" : {
+            "type" : "number",
+            "description" : "Value of the discount as a percentage of the original price.\nYou must provide a valid value for exactly one of the discountPercentage and discount properties.\n"
+          },
+          "discount" : {
+            "type" : "number",
+            "description" : "Value of the discount as a number.\nYou must provide a valid value for exactly one of the discountPercentage and discount properties.\n"
+          },
+          "discountCurrency" : {
+            "type" : "string",
+            "description" : "The 3-letter ISO 4217 currency code. For example, \"EUR\". Required if discount is set.\n"
+          },
+          "eligibleTransactionVolume" : {
+            "$ref" : "#/components/schemas/PriceSpecification"
+          },
+          "termsOfService" : {
+            "type" : "string",
+            "description" : "Url to a human-readable terms of service documentation.\n"
+          }
+        },
+        "description" : "Deals specify fixed discounts that are applied to all orders with a specific restaurant. The active promotion is directly shown to the user upfront on the food provider selection on a restaurants Google entry. Using this feature wisely can lead the user to choose orderDirect instead of another food provider. Promotion code processing withing the checkout handling is required to use this feature.\n",
+        "example" : {
+          "@context" : "schema.org",
+          "@type" : "DiscountFoodOffer",
+          "@id" : "d/123",
+          "identifier" : "BURGEROFF25",
+          "applicableFulfillmentMethod" : [ "DELIVERY", "TAKEOUT" ],
+          "eligibleMaxNumberOfPastSuccessfulOrders" : 5,
+          "validFrom" : "2021-05-01T00:00+02:00",
+          "validThrough" : "2021-05-30T00:00+02:00",
+          "availableDay" : [ "Monday", "Tuesday" ],
+          "availabilityStarts" : "T17:00",
+          "availabilityEnds" : "T20:00",
+          "isDisabled" : false,
+          "category" : "CART_OFF",
+          "discountPercentage" : 10,
+          "discountCurrency" : "EUR",
+          "eligibleTransactionVolume" : {
+            "@type" : "PriceSpecification",
+            "minPrice" : "10.00",
+            "priceCurrency" : "EUR"
+          },
+          "termsOfService" : "https://orderdirect.online/wessburger/burgeroff25"
+        }
+      },
+      "DealReference" : {
+        "required" : [ "@id", "@type" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "DiscountFoodOfferReference" ]
+          },
+          "@id" : {
+            "type" : "string",
+            "description" : "A unique identifier of the linked Deal.\n"
+          }
+        },
+        "description" : "A reference to an existing Deal\n"
+      },
+      "DeliveryChargeSpecification" : {
+        "required" : [ "@id", "@type", "price", "priceCurrency" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "DeliveryChargeSpecification" ]
+          },
+          "@id" : {
+            "type" : "string",
+            "description" : "Identifier for the DeliveryChargeSpecification.\n"
+          },
+          "price" : {
+            "type" : "string",
+            "description" : "Total delivery cost as a numerical only value. Use the priceCurrency property to denote the type of currency instead of currency symbols. For example, \"6.00\", without the currency symbol.\n\nTo configure a DeliveryChargeSpecification for free delivery, set the price = 0 and the eligibleTransactionVolume.minPrice to the price line, from which on this specification shall be applied. The same could be done with the eligibleRegion property, if for a region no delivery fee shall be applied.\n"
+          },
+          "priceCurrency" : {
+            "type" : "string",
+            "description" : "The 3-letter ISO 4217 currency code. For example, \"EUR\".\n"
+          },
+          "eligibleTransactionVolume" : {
+            "$ref" : "#/components/schemas/PriceSpecification"
+          },
+          "eligibleRegion" : {
+            "type" : "array",
+            "description" : "The place, or the GeoShape/GeoCircle for the geo-political region(s) for which the offer or delivery charge specification is valid. Use the property only when delivery fees vary by the region.\n",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "validFrom" : {
+            "type" : "string",
+            "description" : "The date + time (including the timezone) when the delivery charge specified becomes valid. For example, \"2021-05-01T06:30+02:00\". For example, when hours given are good for all of 2021, you might set validFrom to \"2021-01-01T00:00+02:00\" + validThrough to \"2021-12-31T23:59:59+02:00\". For more information, see DateTime + Time formats.\n"
+          },
+          "validThrough" : {
+            "type" : "string",
+            "description" : "The date + time (including the timezone) after which the delivery charge specified is not valid. For example, \"2021-05-01T06:30+02:00\". The time for validThrough is exclusive:: for example, when that time is set to 6PM, the time is valid up to 5:59:59PM.  For example, when hours given are good for all of 2021, you might set validFrom to \"2021-01-01T00:00+02:00\" + validThrough to \"2021-12-31T23:59:59+02:00\". For more information, see DateTime + Time formats.\n"
+          }
+        },
+        "description" : "Indicates the details on the price of the delivery. If multiple DeliveryChargeSpecification objects are applicable, the most specific one is applied. Use mutually exclusive DeliveryChargeSpecification objects to avoid any ambiguity.\n"
+      },
+      "GeoCircle" : {
+        "required" : [ "@type", "geoMidpoint", "geoRadius" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "GeoCircle" ]
+          },
+          "geoMidpoint" : {
+            "$ref" : "#/components/schemas/GeoCoordinates"
+          },
+          "geoRadius" : {
+            "type" : "number",
+            "description" : "Indicates the approximate radius (in meters) of a GeoCircle.\n"
+          }
+        }
+      },
+      "GeoCoordinates" : {
+        "required" : [ "@type", "latitude", "longitude" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "GeoCoordinates" ]
+          },
+          "latitude" : {
+            "type" : "number",
+            "description" : "Latitude in degrees. Values are restricted to the range [[-90, 90]]. This means that when the value specified is less than -90, it will be set to -90; when the value is greater than 90, it will be set to 90. The precision should be at least 5 decimal places.\n"
+          },
+          "longitude" : {
+            "type" : "number",
+            "description" : "Longitude in degrees. Values outside the range [[-180, 180]] will be wrapped so that they fall within the range. For example, a value of -190 will be converted to 170. A value of 190 will be converted to -170. This reflects the fact that longitudes wrap around the globe. The precision should be at least 5 decimal places.\n"
+          }
+        }
+      },
+      "GeoShape" : {
+        "required" : [ "@type", "polygon" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "GeoShape" ]
+          },
+          "polygon" : {
+            "type" : "array",
+            "description" : "A polygon or multipolygon expressed as a series of three or more space delimited points. It is recommended that the first + last points be the same, but it is not required. Each point in a polygon or multipolygon is defined by a latitude point followed by a longitude point. You also must specify the points in a counter-clockwise direction. In most cases you will have a single polygon.\n",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "Menu" : {
+        "required" : [ "@id", "@type", "name" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "Menu" ]
+          },
+          "@id" : {
+            "type" : "string",
+            "description" : "The unique identifier for the menu \"{restaurant_ID}/m/{your_ID}\"\n"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "The text that can identify the Menu when a user is browsing the menu.\n"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Description of the menu.\n"
+          },
+          "disclaimer" : {
+            "$ref" : "#/components/schemas/MenuDisclaimer"
+          },
+          "inLanguage" : {
+            "type" : "string",
+            "description" : "The language of the menu content, as a language code from the IETF BCP 47 standard. For example, \"en-US\".\n"
+          },
+          "hasMenuSection" : {
+            "minItems" : 1,
+            "type" : "array",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/MenuSection"
+              }, {
+                "$ref" : "#/components/schemas/MenuSectionReference"
+              } ]
+            }
+          },
+          "hasMenuItem" : {
+            "minItems" : 1,
+            "type" : "array",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/MenuItem"
+              }, {
+                "$ref" : "#/components/schemas/MenuItemReference"
+              } ]
+            }
+          }
+        },
+        "example" : {
+          "@type" : "Menu",
+          "@id" : "r/ChIJ13mR2PMhv0cRKac2RnCMZhk/m/1",
+          "name" : "Erstes Menü",
+          "inLanguage" : "de",
+          "hasMenuSection" : [ {
+            "@type" : "MenuSection",
+            "@id" : "r/ChIJ13mR2PMhv0cRKac2RnCMZhk/ms/16101",
+            "name" : "Burger",
+            "offers" : [ {
+              "@type" : "Offer",
+              "availableDay" : [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ]
+            } ],
+            "hasMenuItem" : [ {
+              "@type" : [ "MenuItem", "FoodBeverageTobaccoProduct" ],
+              "@id" : "r/ChIJ13mR2PMhv0cRKac2RnCMZhk/mi/127448",
+              "name" : "Classic Burger",
+              "description" : "180g. 100% Rindfleisch, Salat, Zwiebeln, Tomaten, Gurken, Ketchup, Mayo",
+              "offers" : [ {
+                "@type" : "Offer",
+                "sku" : "r/ChIJ13mR2PMhv0cRKac2RnCMZhk/mi/127448/o/1",
+                "price" : "6.7",
+                "priceCurrency" : "EUR",
+                "availableDay" : [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ]
+              } ],
+              "hasAllergen" : [ {
+                "@type" : "AllergenDetails",
+                "allergenType" : "http://gs1.org/voc/AllergenTypeCode-GLUTEN",
+                "allergenLevelOfContainmentCode" : "http://gs1.org/voc/LevelOfContainmentCode-MAY_CONTAIN"
+              }, {
+                "@type" : "AllergenDetails",
+                "allergenType" : "http://gs1.org/voc/AllergenTypeCode-LACTOSE",
+                "allergenLevelOfContainmentCode" : "http://gs1.org/voc/LevelOfContainmentCode-FREE_FROM"
+              } ],
+              "additive" : [ {
+                "@type" : "AdditiveDetails",
+                "additiveName" : "phosphate",
+                "additiveLevelOfContainment" : "http://gs1.org/voc/LevelOfContainmentCode-CONTAINS"
+              } ]
+            }, {
+              "@type" : [ "MenuItem" ],
+              "@id" : "r/ChIJ13mR2PMhv0cRKac2RnCMZhk/mi/127467",
+              "name" : "Cheese Burger",
+              "description" : "180g. 100% Rindfleisch, Salat, Zwiebeln, Tomaten, Gurken, Cheddar",
+              "offers" : [ {
+                "@type" : "Offer",
+                "sku" : "r/ChIJ13mR2PMhv0cRKac2RnCMZhk/mi/127467/o/1",
+                "price" : "7.2",
+                "priceCurrency" : "EUR",
+                "availableDay" : [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ]
+              } ]
+            } ]
+          } ]
+        }
+      },
+      "MenuReference" : {
+        "required" : [ "@id", "@type" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "MenuReference" ]
+          },
+          "@id" : {
+            "type" : "string",
+            "description" : "A unique identifier of the linked Menu.\n"
+          }
+        },
+        "description" : "A reference to an existing Menu\n"
+      },
+      "MenuCatalogReference" : {
+        "required" : [ "@id", "@type" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "array",
+            "example" : [ "MenuReference", "OfferCatalog" ],
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "@id" : {
+            "type" : "string",
+            "description" : "A unique identifier of the linked Menu.\n"
+          }
+        },
+        "description" : "A reference to an existing Menu\n"
+      },
+      "MenuDisclaimer" : {
+        "required" : [ "@id", "@type", "text" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "MenuDisclaimer" ]
+          },
+          "@id" : {
+            "type" : "string",
+            "description" : "Unique identifier for the menu disclaimer.\n"
+          },
+          "text" : {
+            "type" : "string",
+            "description" : "The disclaimer text.\nFor example, \"The average adult daily energy intake is 8700 kJ.\"\n"
+          },
+          "url" : {
+            "type" : "string",
+            "description" : "The URL pointing to a page providing more details on the disclaimer.\n"
+          }
+        }
+      },
+      "MenuItem" : {
+        "required" : [ "@id", "@type", "name" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "array",
+            "description" : "Usually is ['MenuItem'] but needs to be extended, when the properties MenuItem.hasAllergen, MenuItem.additive or MenuItem.packaging will be used: ['MenuItem', 'FoodBeverageTobaccoProduct']\n",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "MenuItem", "FoodBeverageTobaccoProduct" ]
+            }
+          },
+          "@id" : {
+            "type" : "string",
+            "description" : "Unique identifier of the menu item.\n"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "The text that can identify the MenuItem when a user is browsing the menu.\n"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Description of the menu item.\n"
+          },
+          "image" : {
+            "type" : "string",
+            "description" : "The Url for an image of the menu item.\nImage Guidelines::\nAspect Ratio 3:2\nmin Resolution 600 x 400 px. 72. Dpi\nRecommended Resolution 1400 x 960 px. 72. dpi\n"
+          },
+          "menuAddOn" : {
+            "type" : "array",
+            "description" : "The MenuItem can have a menu section comprised of allowed items that can be added as an add-on.\n",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/AddOnMenuSection"
+              }, {
+                "$ref" : "#/components/schemas/AddOnMenuSectionReference"
+              } ]
+            }
+          },
+          "offers" : {
+            "type" : "array",
+            "description" : "Mutually exclusive with MenuItem.hasMenuItemOptions. One or many offers to provide the MenuItem. Describes when + at what price the MenuItem is available. Only one offer should be valid at a particular point in time. Multiple offers can be provided when there is variation on price/availability. when the food item differs through a base attribute, (for example, size for pizza), use menuItemOption. The default for Offer.eligibleQuantity is min of 0 with no upper limit.\n",
+            "items" : {
+              "$ref" : "#/components/schemas/OfferMenuItem"
+            }
+          },
+          "hasMenuItemOptions" : {
+            "type" : "array",
+            "description" : "Mutually exclusive with MenuItem.offers. List of base options/variation for the menu item. Options should be used to specify various base variations available for the item, for example small, medium + large.\n",
+            "items" : {
+              "$ref" : "#/components/schemas/MenuItemOption"
+            }
+          },
+          "suitableForDiet" : {
+            "type" : "array",
+            "description" : "The dish complies with the described dietary restriction (e.g. \"http://schema.org/GlutenFreeDiet\", \"http://schema.org/VeganDiet\", etc. This is an enumerated list of possible values.\n",
+            "items" : {
+              "$ref" : "#/components/schemas/RestrictedDiet"
+            }
+          },
+          "nutrition" : {
+            "$ref" : "#/components/schemas/NutritionInformation"
+          },
+          "hasAllergen" : {
+            "type" : "array",
+            "description" : "List of allergens for this menuItem.\n",
+            "items" : {
+              "$ref" : "#/components/schemas/AllergenDetails"
+            }
+          },
+          "additive" : {
+            "type" : "array",
+            "description" : "List of additives for this menuItem.\n",
+            "items" : {
+              "$ref" : "#/components/schemas/AdditiveDetails"
+            }
+          },
+          "packaging" : {
+            "$ref" : "#/components/schemas/PackagingDetails"
+          }
+        }
+      },
+      "MenuItemReference" : {
+        "required" : [ "@id", "@type" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "MenuItem" ]
+            }
+          },
+          "@id" : {
+            "type" : "string",
+            "description" : "A unique identifier of the linked MenuItem.\n"
+          }
+        },
+        "description" : "A reference to an existing MenuItem\n"
+      },
+      "MenuItemOption" : {
+        "required" : [ "@type", "offers", "value" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "array",
+            "description" : "Usually is ['MenuItemOption'] but needs to be extended, when the properties MenuItemOption.hasAllergen, MenuItemOption.additive or MenuItemOption.packaging will be used: ['MenuItemOption', 'FoodBeverageTobaccoProduct']\n",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "MenuItemOption", "FoodBeverageTobaccoProduct" ]
+            }
+          },
+          "value" : {
+            "$ref" : "#/components/schemas/MenuItemOptionPropertyValue"
+          },
+          "offers" : {
+            "type" : "array",
+            "description" : "One or more offers to provide the MenuItemOption. Describes when + at what price the MenuItemOption is available. Only one offer should be valid at a particular point in time. You can have many valid offers when the price/availability can change. Don't use Offer.eligibleQuantity. MenuItemOption is mutually exclusive, so Offer.eligibleQuantity will be ignored when provided.\n",
+            "items" : {
+              "$ref" : "#/components/schemas/OfferMenuItem"
+            }
+          },
+          "suitableForDiet" : {
+            "type" : "array",
+            "description" : "An enumerated list that indicates which diets the dish complies with the described dietary restriction (e.g. \"http://schema.org/GlutenFreeDiet\", \"http://schema.org/VeganDiet\", etc).\n",
+            "items" : {
+              "$ref" : "#/components/schemas/RestrictedDiet"
+            }
+          },
+          "nutrition" : {
+            "$ref" : "#/components/schemas/NutritionInformation"
+          },
+          "hasAllergen" : {
+            "type" : "array",
+            "description" : "List of allergens for this menuItemOption.\n",
+            "items" : {
+              "$ref" : "#/components/schemas/AllergenDetails"
+            }
+          },
+          "additive" : {
+            "type" : "array",
+            "description" : "List of additives for this menuItemOption.\n",
+            "items" : {
+              "$ref" : "#/components/schemas/AdditiveDetails"
+            }
+          },
+          "packaging" : {
+            "$ref" : "#/components/schemas/PackagingDetails"
+          }
+        },
+        "description" : "An option to represent choices that a user would be required to make when selecting a dish or combo. The user must select an option, otherwise the order is considered invalid. For example, choosing small, medium, or large in the case of a pizza.\n"
+      },
+      "MenuItemOptionPropertyValue" : {
+        "required" : [ "@type", "name", "value" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "PropertyValue" ]
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "\"SIZE\": Size of the MenuItem. For example, small, medium, or large. \"OPTION\": Any variation other than size (like a dish that comes either as a salad or a sandwich). If you can't distinguish between \"SIZE\" and \"OPTION\", then use \"OPTION\".\n",
+            "enum" : [ "SIZE", "OPTION" ]
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "Defines the UI display name for this menuItemOption. Examples: name = \"SIZE\" => value = \"medium\", \"large (30 cm)\", etc. name = \"OPTION\" => value = \"as salad\", \"as sandwich\", etc.\n"
+          }
+        }
+      },
+      "MenuSection" : {
+        "required" : [ "@id", "@type", "name" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "MenuSection" ]
+          },
+          "@id" : {
+            "type" : "string",
+            "description" : "Unique identifier of the menu section.\n"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "The text that can identify the MenuSection when a user is browsing the menu.\n"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Description of the menu section.\n"
+          },
+          "hasMenuSection" : {
+            "type" : "array",
+            "description" : "A logical sub-grouping of the MenuSection (e.g. for the MenuSection, Dinner one can have multiple sub-MenuSections like \"Poultry Dishes\", \"Vegetarian\", etc.).\n",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/MenuSection"
+              }, {
+                "$ref" : "#/components/schemas/MenuSectionReference"
+              } ]
+            }
+          },
+          "hasMenuItem" : {
+            "type" : "array",
+            "description" : "MenuItems contained in a MenuSection.\n",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/MenuItem"
+              }, {
+                "$ref" : "#/components/schemas/MenuItemReference"
+              } ]
+            }
+          },
+          "offers" : {
+            "type" : "array",
+            "description" : "Use Offers to define the availability of the section. Only one Offer should be valid at a particular point in time.\n",
+            "items" : {
+              "$ref" : "#/components/schemas/OfferMenuSection"
+            }
+          },
+          "image" : {
+            "type" : "string",
+            "description" : "The Url for an image of the menu section.\n"
+          }
+        }
+      },
+      "MenuSectionReference" : {
+        "required" : [ "@id", "@type" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "MenuSectionReference" ]
+          },
+          "@id" : {
+            "type" : "string",
+            "description" : "A unique identifier of the linked MenuSection.\n"
+          }
+        },
+        "description" : "A reference to an existing MenuSection\n"
+      },
+      "NutritionInformation" : {
+        "required" : [ "@type" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "NutritionInformation" ]
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Nutrition information in free text. For example \"Contains preservatives\".\n"
+          },
+          "calories" : {
+            "type" : "string",
+            "description" : "The number of calories in Cal, kcal, or kJ, using the below format:: number Cal_kcal_OR_kJ For example, \"240 Cal\".\n"
+          },
+          "carbohydrateContent" : {
+            "type" : "string",
+            "description" : "The amount of carbohydrates, typically in g, using the below format:: number g_OR_mg For example, \"7 g\".\n"
+          },
+          "cholesterolContent" : {
+            "type" : "string",
+            "description" : "The amount of cholesterol, typically in mg, using the below format:: number g_OR_mg For example, \"12 mg\".\n"
+          },
+          "fatContent" : {
+            "type" : "string",
+            "description" : "The amount of fat, typically in g, using the below format::\nnumber g_OR_mg\nFor example, \"42 g\".\n"
+          },
+          "fiberContent" : {
+            "type" : "string",
+            "description" : "The number of g or mg of fiber, using the below format::\nnumber g_OR_mg\n"
+          },
+          "proteinContent" : {
+            "type" : "string",
+            "description" : "The number of g or mg of protein, using the below format::\nnumber g_OR_mg\n"
+          },
+          "saturatedFatContent" : {
+            "type" : "string",
+            "description" : "The number of g or mg of saturated fat, using the below format::\nnumber g_OR_mg\n"
+          },
+          "servingSize" : {
+            "type" : "string",
+            "description" : "The serving size in mL, L, g, or kg, in terms of the number of volume or mass.\n"
+          },
+          "sodiumContent" : {
+            "type" : "string",
+            "description" : "The number of mg or g of sodium, using the below format::\nnumber g_OR_mg\n"
+          },
+          "sugarContent" : {
+            "type" : "string",
+            "description" : "The number of g or mg of sugar, using the below format::\nnumber g_OR_mg\n"
+          },
+          "transFatContent" : {
+            "type" : "string",
+            "description" : "The number of g or mg of trans fat, using the below format::\nnumber g_OR_mg\n"
+          },
+          "unsaturatedFatContent" : {
+            "type" : "string",
+            "description" : "The amount of unsaturated fat, typically in g, using the below format:: number g_OR_mg\n"
+          }
+        }
+      },
+      "OfferMenuSection" : {
+        "required" : [ "@type" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "Offer" ]
+          },
+          "availabilityStarts" : {
+            "type" : "string",
+            "description" : "The daytime at which the MenuSection becomes available. For example, pancakes are served beginning at 7:00am; the value of the field might look like: \"T07:00\".   The time must be specified in the local time for the restaurant.   For more information, see 'DateTime and Time values' in the introduction of this document.\n"
+          },
+          "availabilityEnds" : {
+            "type" : "string",
+            "description" : "The daytime, when the MenuSection is not available anymore. the time is exclusive, so when it is set to 10AM for serving pancakes, the last pancake can be served at 9:59:59AM. The value of the field might look like: \"T10:00\".   The time must be specified in the local time for the restaurant.   For more information, see 'DateTime and Time values' in the introduction of this document.\n"
+          },
+          "availableDay" : {
+            "type" : "array",
+            "description" : "Days of the week that the item is available. Valid values are:: \"Monday\" \"Tuesday\" \"Wednesday\" \"Thursday\" \"Friday\" \"Saturday\" \"Sunday\" when you have different availability for different days of the week, use more than one Offer object.\n",
+            "items" : {
+              "$ref" : "#/components/schemas/DayOfWeek"
+            }
+          },
+          "validFrom" : {
+            "type" : "string",
+            "description" : "The date + time (including the timezone) at which the MenuSection becomes available. For Example: \"2021-05-01T07:00+02:00\". For more information, see 'DateTime and Time values' in the introduction of this document.\n"
+          },
+          "validThrough" : {
+            "type" : "string",
+            "description" : "The date + time (including the timezone) after which the MenuSection is no longer available. For example: \"2021-05-01T18:00+02:00\" The time for validThrough is exclusive: for example, when the time on the end date is set to 6PM, the Offer is valid up to 5:59:59PM. For more information, see 'DateTime and Time values' in the introduction of this document.\n"
+          }
+        }
+      },
+      "OfferMenuItem" : {
+        "required" : [ "@type", "price", "priceCurrency", "sku" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "Offer" ]
+          },
+          "sku" : {
+            "type" : "string",
+            "description" : "Unique identifier of the offer. Can be any text value that's unique within the Offer. sku values are referenced in Checkout + Submit as the offerId in lineitem.\n"
+          },
+          "price" : {
+            "type" : "string",
+            "description" : "Price of the offered item. For example, \"6.00\" without the currency symbol.\n"
+          },
+          "priceCurrency" : {
+            "type" : "string",
+            "description" : "The currency (in 3-letter ISO 4217 format) of the price or a price component, when attached to PriceSpecification + its subtypes.\n"
+          },
+          "availabilityStarts" : {
+            "type" : "string",
+            "description" : "The daytime, e.g. \"T10:00\", from which the food item is available at the specified price.   The time must be specified in the local time for the restaurant.    For more information, see 'DateTime and Time values' in the introduction of this document.\n"
+          },
+          "availabilityEnds" : {
+            "type" : "string",
+            "description" : "The daytime, e.g. \"T14:00\", when the food item is not available anymore at the specified price. the time is exclusive, so when it is set to 2PM, the Offer becomes invalid after 1:59:59PM.     The time must be specified in the local time for the restaurant.   For more information, see 'DateTime and Time values' in the introduction of this document.\n"
+          },
+          "availableDay" : {
+            "type" : "array",
+            "description" : "Days of the week that the item is available. Valid values are:: \"Monday\" \"Tuesday\" \"Wednesday\" \"Thursday\" \"Friday\" \"Saturday\" \"Sunday\" when you have different availability for different days of the week, use more than one Offer object.\n",
+            "items" : {
+              "$ref" : "#/components/schemas/DayOfWeek"
+            }
+          },
+          "validFrom" : {
+            "type" : "string",
+            "description" : "The date + time (including the timezone), when a food item becomes available at the specified price. For Example: \"2021-05-01T07:00+02:00\". For more information, see 'DateTime and Time values' in the introduction of this document.\n"
+          },
+          "validThrough" : {
+            "type" : "string",
+            "description" : "The date + time (including the timezone) after which a food item at the specified price is not available anymore. For example: \"2021-05-01T18:00+02:00\" The time for validThrough is exclusive: for example, when that time is set to 6PM, the time is valid up to 5:59:59PM. For more information, see 'DateTime and Time values' in the introduction of this document.\n"
+          },
+          "eligibleQuantity" : {
+            "$ref" : "#/components/schemas/QuantitativeValue"
+          },
+          "aggregateRating" : {
+            "$ref" : "#/components/schemas/AggregateRating"
+          },
+          "inventoryLevel" : {
+            "$ref" : "#/components/schemas/QuantitativeValue"
+          }
+        }
+      },
+      "OfferService" : {
+        "required" : [ "@type", "priceSpecification" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "Offer" ]
+          },
+          "priceSpecification" : {
+            "type" : "array",
+            "description" : "With this property you can specify a variety of fees to users upfront. Currently only one active DeliveryChargeSpecification or one active PaymentChargeSpecification (for takeout orders) is supported. Combine all types of fees into a single ChargeSpecification of one of those mutually exclusive types. If there are no fees at all, Offer.PriceSpecification can be omitted.\n",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/DeliveryChargeSpecification"
+              }, {
+                "$ref" : "#/components/schemas/PaymentChargeSpecification"
+              } ]
+            }
+          }
+        }
+      },
+      "OpeningHoursSpecification" : {
+        "required" : [ "@type", "deliveryHours" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "OpeningHoursSpecification" ]
+          },
+          "@id" : {
+            "type" : "string",
+            "description" : "Identifier for the OpeningHoursSpecification.\n"
+          },
+          "dayOfWeek" : {
+            "type" : "array",
+            "description" : "The day of the week for which these opening hours are valid. Acceptable values are \"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\", + \"Sunday\". For example:: \"dayOfWeek\": [\n  \"Monday\",\n  \"Tuesday\",\n  \"Wednesday\",\n  \"Thursday\",\n  \"Friday\"\n] when you Don't specify any days of week, then the OpeningHoursSpecification applies to all days.\n",
+            "items" : {
+              "$ref" : "#/components/schemas/DayOfWeek"
+            }
+          },
+          "opens" : {
+            "type" : "string",
+            "description" : "The property indicates the specific time of day starting from which users' orders can be placed. It specifies the opening time for when the online system is up + allows users to place orders. Within those online system opening/closing hours, you can use deliveryHours to specify opening/closing hours when users can order special types of deliveries. The time must be specified in the local time for the service. For example, 6:30AM might be given as \"T06:30\". Don't include a timezone in an opens value. when a timezone is specified, Google ignores the information. For more information, see DateTime + Time formats.\n"
+          },
+          "closes" : {
+            "type" : "string",
+            "description" : "The property indicates the specific time of day beyond which users' orders can't be placed. It specifies the closing time for when the online system is up and allows users to place orders. Within those online system opening/closing hours, you can use deliveryHours to specify opening/closing hours when users can order special types of deliveries. The time must be specified in the local time for the service. For example, 10:30PM might be given as \"T22:30\". Opening Hours crossing midnight are supported within one specification, just set the closes value to the correct time on the next day. Don't include a timezone in a closes value. when a timezone is specified, Google ignores the information. For more information, see DateTime + Time formats.\n"
+          },
+          "validFrom" : {
+            "type" : "string",
+            "description" : "The field indicates the beginning date starting from which users' orders can be placed. In addition to the date, the time + timezone portions of the value are required. For the timezone, use the Restaurant timezone. For example, when the hours given are good for all of 2021, you might set validFrom to \"2021-01-01T00:00+02:00\" + validThrough to \"2021-12-31T23:59:59+02:00\". For more information, see DateTime + Time formats.\n"
+          },
+          "validThrough" : {
+            "type" : "string",
+            "description" : "The field indicates indicates the ending date beyond which users' orders can no longer be placed. In addition to the date, the time + timezone portions of the DateTime are required. For the timezone, use the Restaurant timezone. The time for validThrough is exclusive. For example, when that time is set to 6PM, the time is valid up to 5:59:59PM. For example, when the hours given are good for all of 2021, you might set validFrom to \"2021-01-01T00:00+02:00\" + validThrough to \"2021-12-31T23:59:59+02:00\". For more information, see DateTime + Time formats.\n"
+          },
+          "deliveryHours" : {
+            "type" : "array",
+            "description" : "The delivery or takeout time specification. the parameter is required unless the restaurant is closed (meaning that the opens + closes are set + equal to each other. ServiceDeliveryHoursSpecification: Within the opening/closing hours, you can set \"opens\" + \"closes\" hours when users can place ASAP orders. AdvanceServiceDeliveryHoursSpecification:: Within the opening/closing hours, you can set \"opens\" + \"closes\" hours when users can place advance orders.\n",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/ServiceDeliveryHoursSpecification"
+              }, {
+                "$ref" : "#/components/schemas/AdvanceServiceDeliveryHoursSpecification"
+              } ]
+            }
+          }
+        }
+      },
+      "PackagingDetails" : {
+        "required" : [ "@type" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "PackagingDetails" ]
+          },
+          "packagingRecyclingProcessType" : {
+            "type" : "string",
+            "description" : "Packaging recycling process type per <a href=\"https://www.gs1.org/voc/PackagingRecyclingProcessTypeCode\">gs1:PackagingRecyclingProcessTypeCode</a>. For example \"http://gs1.org/voc/PackagingRecyclingProcessTypeCode-RECYCLABLE\" or \"http://gs1.org/voc/PackagingRecyclingProcessTypeCode-REUSABLE\"\n"
+          },
+          "hasReturnablePackageDeposit" : {
+            "$ref" : "#/components/schemas/ReturnablePackageDepositDetails"
+          }
+        },
+        "description" : "The packaging and recycling information of a MenuItem per <a href=\"https://www.gs1.org/voc/PackagingDetails\">gs1:PackagingDetails</a>. To use this type, add 'FoodBeverageTobaccoProduct' to the type of the MenuItem or  MenuItemOption. (e.g. \"@type\": [\"MenuItem\", \"FoodBeverageTobaccoProduct\"])\n"
+      },
+      "ReturnablePackageDepositDetails" : {
+        "required" : [ "@type" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "ReturnablePackageDepositDetails" ]
+          },
+          "returnablePackageDepositAmount" : {
+            "$ref" : "#/components/schemas/ReturnablePackageDepositDetails_returnablePackageDepositAmount"
+          }
+        },
+        "description" : "Returnable package deposit details per <a href=\"https://www.gs1.org/voc/ReturnablePackageDepositDetails\">gs1:ReturnablePackageDepositDetails</a>. For example, bottles and cans have returnable package deposits. To use this type add, 'FoodBeverageTobaccoProduct' to the type of the MenuItem or MenuItemOption. (e.g. \"@type\": [\"MenuItem\", \"FoodBeverageTobaccoProduct\"])\n"
+      },
+      "PaymentChargeSpecification" : {
+        "required" : [ "@id", "@type", "price", "priceCurrency" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "PaymentChargeSpecification" ]
+          },
+          "@id" : {
+            "type" : "string",
+            "description" : "Identifier for the PaymentChargeSpecification.\n"
+          },
+          "price" : {
+            "type" : "number",
+            "description" : "Total amount of the charge. For example, \"6.00\", without the currency symbol.\n"
+          },
+          "priceCurrency" : {
+            "type" : "string",
+            "description" : "The 3-letter ISO 4217 currency code of the price. For example, \"EUR\".\n"
+          },
+          "eligibleTransactionVolume" : {
+            "$ref" : "#/components/schemas/PriceSpecification"
+          },
+          "validFrom" : {
+            "type" : "string",
+            "description" : "The date + time (including the timezone) when the payment charge specified becomes valid. For example, \"2021-05-01T07:00+02:00\". For more information, see DateTime + Time formats.\n"
+          },
+          "validThrough" : {
+            "type" : "string",
+            "description" : "The date + time (including the timezone) when the payment charge specified is not valid. For example, \"2021-05-01T07:30+02:00\". The time for validThrough is exclusive:: for example, when that time is set to 6PM, the time is valid up to 5:59:59PM. For more information, see DateTime + Time formats.\n"
+          }
+        },
+        "description" : "Indicates the details on the price for takeout. If multiple PaymentChargeSpecification objects are applicable, the most specific one is applied. Use mutually exclusive PaymentChargeSpecification objects to avoid any ambiguity.\n"
+      },
+      "Place" : {
+        "required" : [ "@type", "address" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "Place" ]
+          },
+          "address" : {
+            "$ref" : "#/components/schemas/PostalAddressDelivery"
+          }
+        }
+      },
+      "PostalAddressDelivery" : {
+        "required" : [ "@type", "addressCountry", "addressLocality", "addressRegion", "postalCode" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "PostalAddress" ]
+          },
+          "addressLocality" : {
+            "type" : "string",
+            "description" : "The locality or city. For example, \"Dusseldorf\".\n"
+          },
+          "addressRegion" : {
+            "type" : "string",
+            "description" : "The region or federal state. For example, \"NRW\" or \"Nordrhein-Westfalen\"\n"
+          },
+          "postalCode" : {
+            "type" : "string",
+            "description" : "The postal code. For example, \"40235\".\n"
+          },
+          "addressCountry" : {
+            "type" : "string",
+            "description" : "Two-letter ISO 3166-1 alpha-2 country code . For example, \"DE\".\n"
+          }
+        },
+        "description" : "A postal code area used as a delivery area.\n"
+      },
+      "PostalAddressRestaurant" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/PostalAddressDelivery"
+        }, {
+          "required" : [ "streetAddress" ],
+          "type" : "object",
+          "properties" : {
+            "streetAddress" : {
+              "type" : "string",
+              "description" : "The street address. For example, \"Metro-Strasse 1\".\n"
+            }
+          },
+          "description" : "The postal address of a restaurant.\n"
+        } ]
+      },
+      "PriceSpecification" : {
+        "required" : [ "@type", "priceCurrency" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "PriceSpecification" ]
+          },
+          "@id" : {
+            "type" : "string",
+            "description" : "Identifier for the PriceSpecification.\n"
+          },
+          "minPrice" : {
+            "type" : "string",
+            "description" : "The lowest price when the price is a range.\n"
+          },
+          "maxPrice" : {
+            "type" : "string",
+            "description" : "The highest price when the price is a range.\n"
+          },
+          "priceCurrency" : {
+            "type" : "string",
+            "description" : "The 3-letter ISO 4217 currency code of the price. For example, \"EUR\".\n"
+          }
+        }
+      },
+      "Restaurant" : {
+        "required" : [ "@id", "@type", "address", "geo", "hasMenu", "name", "servesCuisine", "telephone", "url" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "Restaurant" ]
+          },
+          "@id" : {
+            "type" : "string",
+            "description" : "The unique identifier for the restaurant \"r/{google_place_ID}\"\n"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "url" : {
+            "$ref" : "#/components/schemas/URL"
+          },
+          "sameAs" : {
+            "$ref" : "#/components/schemas/URL"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "telephone" : {
+            "type" : "string",
+            "description" : "Using the following format: [+][country_code][phone_#_with_area_code]\n"
+          },
+          "priceRange" : {
+            "type" : "string",
+            "description" : "A range of pricing. For example, \"$$\" ($-Inexpensive, $$-Moderate, $$$-Expensive, $$$$-Very Expensive)\nAlways use the Dollar sign in this special field, also when your normal operating prices are in another currency\n"
+          },
+          "hasMenu" : {
+            "minItems" : 1,
+            "type" : "array",
+            "description" : "One or more Menus offered by the restaurant.\n",
+            "items" : {
+              "$ref" : "#/components/schemas/MenuReference"
+            }
+          },
+          "logo" : {
+            "type" : "string",
+            "description" : "A logo of the restaurant in PNG, JPG, or GIF format. For example, \"http://www.somerestaurant.com/logo.png\".\n"
+          },
+          "image" : {
+            "type" : "string",
+            "description" : "The Url for an image of the restaurant.\n"
+          },
+          "servesCuisine" : {
+            "type" : "array",
+            "description" : "Food types that are served at the restaurant. For example, [\"sushi\",\"Asian fusion\"].\n",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "address" : {
+            "$ref" : "#/components/schemas/PostalAddressRestaurant"
+          },
+          "geo" : {
+            "$ref" : "#/components/schemas/GeoCoordinates"
+          },
+          "suitableForDiet" : {
+            "type" : "array",
+            "description" : "Dietary restrictions the restaurant accommodates (e.g. kosher, vegan, gluten-free diet, etc). It is an enumerated list.\n",
+            "items" : {
+              "$ref" : "#/components/schemas/RestrictedDiet"
+            }
+          },
+          "aggregateRating" : {
+            "$ref" : "#/components/schemas/AggregateRating"
+          },
+          "additionalProperty" : {
+            "type" : "array",
+            "description" : "Additional information about the restaurant in the format of an Array of name value string pairs. For example [{\"name\": \"imprint\", \"value\": \"first row\\nsecondrow\\n\"}]\n",
+            "items" : {
+              "$ref" : "#/components/schemas/Restaurant_additionalProperty"
+            }
+          },
+          "makesOffer" : {
+            "minItems" : 1,
+            "type" : "array",
+            "description" : "One or more Deals offered by the restaurant.\n",
+            "items" : {
+              "$ref" : "#/components/schemas/DealReference"
+            }
+          }
+        },
+        "example" : {
+          "@type" : "Restaurant",
+          "@id" : "r/ChIJ13mR2PMhv0cRKac2RnCMZhk",
+          "name" : "Wessburger",
+          "url" : "https://orderdirect.online/restaurant/wessburger-wesseling.html",
+          "sameAs" : "http://www.wessburger.de",
+          "telephone" : "+4922365096037",
+          "address" : {
+            "@type" : "PostalAddress",
+            "streetAddress" : "Flach-Fengler-Straße 120A",
+            "postalCode" : "50389",
+            "addressLocality" : "Wesseling",
+            "addressRegion" : "NRW",
+            "addressCountry" : "DE"
+          },
+          "geo" : {
+            "@type" : "GeoCoordinates",
+            "latitude" : "50.81969792398563",
+            "longitude" : "6.975704512268408"
+          },
+          "servesCuisine" : [ "Burger" ],
+          "hasMenu" : [ {
+            "@type" : "MenuReference",
+            "@id" : "r/ChIJ13mR2PMhv0cRKac2RnCMZhk/m/1"
+          } ],
+          "additionalProperty" : [ {
+            "name" : "imprint",
+            "value" : "Wessburger\nFlach-Fengler-Straße 120A\n50389 Wesseling\nInhaber: Ole Owner\nE-Mail: info@wessburger.de\nTelefon: +4922365096037\n"
+          } ],
+          "makesOffer" : [ {
+            "@type" : "DiscountFoodOfferReference",
+            "@id" : "d/123"
+          } ]
+        }
+      },
+      "RestaurantReference" : {
+        "required" : [ "@id", "@type" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "RestaurantReference" ]
+          },
+          "@id" : {
+            "type" : "string",
+            "description" : "A unique identifier of the linked Restaurant.\n"
+          }
+        },
+        "description" : "A reference to an existing Restaurant\n"
+      },
+      "Service" : {
+        "required" : [ "@id", "@type", "hasOfferCatalog", "hoursAvailable", "provider", "serviceType" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "description" : "\"Service\" Use this type for all active Service feeds.\n\"DisabledService\" Only use this type when you must disable a Service entity due to an unexpected event + you don't know when the service will be re-established (e.g. for holidays)\n",
+            "enum" : [ "Service", "DisabledService" ]
+          },
+          "@id" : {
+            "type" : "string",
+            "description" : "Unique identifier for the fulfillment service {restaurant_ID}/s_delivery/{your_ID}\" or \"{restaurant_ID}/s_takeout/{your_ID}\"\n"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Description of the item.\n"
+          },
+          "serviceType" : {
+            "type" : "string",
+            "description" : "The type of service being offered. Possible values are \"DELIVERY\" or \"TAKEOUT\".\n"
+          },
+          "provider" : {
+            "$ref" : "#/components/schemas/RestaurantReference"
+          },
+          "areaServed" : {
+            "type" : "array",
+            "description" : "The geographic area where a service is provided. the field is optional by default, but required when serviceType is \"DELIVERY\". conditional\n",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/GeoShape"
+              }, {
+                "$ref" : "#/components/schemas/Place"
+              }, {
+                "$ref" : "#/components/schemas/GeoCircle"
+              } ]
+            }
+          },
+          "hoursAvailable" : {
+            "type" : "array",
+            "description" : "The hours during which the service is available.\n",
+            "items" : {
+              "$ref" : "#/components/schemas/OpeningHoursSpecification"
+            }
+          },
+          "specialOpeningHoursSpecification" : {
+            "type" : "array",
+            "description" : "Times that override the more general OpeningHoursSpecification or the fulfillment times. You typically use the field to define holidays + other types of temporary closures/changes in hours. You define the special date range using the validFrom + validThrough properties. The time + timezone are required when specifying these properties.\n",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/OpeningHoursSpecification"
+              }, {
+                "$ref" : "#/components/schemas/ServiceDeliveryHoursSpecification"
+              }, {
+                "$ref" : "#/components/schemas/AdvanceServiceDeliveryHoursSpecification"
+              } ]
+            }
+          },
+          "offers" : {
+            "type" : "array",
+            "description" : "Details about the delivery/takeout offering for a specified restaurant. The field is optional by default, but required when serviceType is \"DELIVERY\".\n",
+            "items" : {
+              "$ref" : "#/components/schemas/OfferService"
+            }
+          },
+          "hasOfferCatalog" : {
+            "$ref" : "#/components/schemas/MenuCatalogReference"
+          }
+        },
+        "example" : {
+          "@id" : "r/ChIJ13mR2PMhv0cRKac2RnCMZhk/s_d/85",
+          "@type" : "Service",
+          "serviceType" : "DELIVERY",
+          "provider" : {
+            "@type" : "RestaurantReference",
+            "@id" : "r/ChIJ13mR2PMhv0cRKac2RnCMZhk"
+          },
+          "hasOfferCatalog" : {
+            "@type" : [ "MenuReference", "OfferCatalog" ],
+            "@id" : "r/ChIJ13mR2PMhv0cRKac2RnCMZhk/m/1"
+          },
+          "offers" : [ {
+            "@type" : "Offer",
+            "priceSpecification" : [ {
+              "@id" : "r/ChIJ13mR2PMhv0cRKac2RnCMZhk/s_d/85/fee_delivery_default",
+              "@type" : "DeliveryChargeSpecification",
+              "price" : "0",
+              "priceCurrency" : "EUR",
+              "eligibleTransactionVolume" : {
+                "@type" : "PriceSpecification",
+                "minPrice" : "8",
+                "priceCurrency" : "EUR"
+              }
+            } ]
+          } ],
+          "areaServed" : [ {
+            "@type" : "GeoShape",
+            "polygon" : [ "50.82359856289408 6.96146600571285 50.824314432299545 6.963664076000555 50.82500995880669 6.964617601305349 50.82723116896003 6.963681510359152 50.847340931846624 6.967946222692831 50.84479381320981 6.976400545507772 50.842273654723435 6.978138616949423 50.83694835605344 6.9765185627044275 50.83162244964018 6.978331735998495 50.827339600617506 6.983052423864706 50.824249199684004 6.989403894811971 50.82365278297291 6.992837122351034 50.82245136686576 7.006847175606254 50.822071815225726 7.010366233833793 50.80942284807544 7.002856048592093 50.80894665685706 7.0039046868051855 50.8075348514988 7.005682885870215 50.80492969939581 7.009419097516229 50.80239220798786 7.011803475818624 50.79869437876337 7.000999537906637 50.79879383492897 6.990764228305807 50.7970216699789 6.9860006250953575 50.796427165872814 6.982256261310567 50.797351695257376 6.978855220279684 50.80575073812517 6.960744945011129 50.80456834505577 6.947579600647259 50.80941467088729 6.956210417997795 50.81396222278909 6.958489764401065 50.81509578732213 6.962811360295518 50.81918055426642 6.960734267999214 50.824017267278876 6.959257990522133" ]
+          }, {
+            "@type" : "GeoCircle",
+            "geoRadius" : "1480",
+            "geoMidpoint" : {
+              "@type" : "GeoCoordinates",
+              "latitude" : "50.81592492279859",
+              "longitude" : "6.959878137976034"
+            }
+          } ],
+          "hoursAvailable" : [ {
+            "@type" : "OpeningHoursSpecification",
+            "opens" : "T11:30",
+            "closes" : "T21:30",
+            "dayOfWeek" : [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" ],
+            "deliveryHours" : [ {
+              "@type" : "ServiceDeliveryHoursSpecification",
+              "opens" : "T11:30",
+              "closes" : "T21:30",
+              "dayOfWeek" : [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" ],
+              "deliveryLeadTime" : {
+                "@type" : "QuantitativeValue",
+                "value" : "30",
+                "unitCode" : "MIN"
+              }
+            } ]
+          } ]
+        }
+      },
+      "ServiceReference" : {
+        "required" : [ "@id", "@type" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "ServiceReference" ]
+          },
+          "@id" : {
+            "type" : "string",
+            "description" : "A unique identifier of the linked Service.\n"
+          }
+        },
+        "description" : "A reference to an existing Service\n"
+      },
+      "ServiceDeliveryHoursSpecification" : {
+        "required" : [ "@type" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "ServiceDeliveryHoursSpecification" ]
+          },
+          "validFrom" : {
+            "type" : "string",
+            "description" : "The date + time (including the timezone) when users' ASAP orders can be fulfilled. For example, \"2021-05-01T07:00+02:00\". when the property is not set, then it is assumed to be valid every day. For more information, see DateTime + Time formats.\n"
+          },
+          "validThrough" : {
+            "type" : "string",
+            "description" : "The date + time (including the timezone) after which users' ASAP orders can't be fulfilled. For example, \"2021-05-01T07:00+02:00\". when the property is not set, then it is assumed to be valid every day. The time for validThrough is exclusive. For example, when that time is set to 6PM, the time is valid up to 5:59:59PM. For more information, see DateTime + Time formats.\n"
+          },
+          "opens" : {
+            "type" : "string",
+            "description" : "The time at which delivery service starts for users' ASAP orders to be fulfilled. For example, \"T10:30\". The time must be specified in the local time for the service. Don't include a timezone in an opens value. when a timezone is specified, Google ignores the information. For more information, see DateTime + Time formats.\n"
+          },
+          "closes" : {
+            "type" : "string",
+            "description" : "The time when delivery service for users' ASAP orders is no longer available. For example, \"T23:00\". The time for closes is exclusive. Therefore, when you set opens/closes for the ServiceDeliveryHoursSpecification to 10am + 4pm, then that last order is 3:59:59pm. Delivery Hours crossing midnight are supported within one specification, just set the closes value to the correct time on the next day. The time must be specified in the local time for the service. Don't include a timezone in a closes value. when a timezone is specified, Google ignores the information. For more information, see DateTime + Time formats.\n"
+          },
+          "dayOfWeek" : {
+            "type" : "array",
+            "description" : "Days of the week that the service is available for users' ASAP orders. Valid values are:: \"Monday\" \"Tuesday\" \"Wednesday\" \"Thursday\" \"Friday\" \"Saturday\" \"Sunday\" when you Don't specify any days of week, then the ServiceDeliveryHoursSpecification applies to all days.\n",
+            "items" : {
+              "$ref" : "#/components/schemas/DayOfWeek"
+            }
+          },
+          "deliveryLeadTime" : {
+            "$ref" : "#/components/schemas/DeliveryTimeQuantitativeValue"
+          }
+        }
+      },
+      "RestrictedDiet" : {
+        "type" : "string",
+        "enum" : [ "http://schema.org/DiabeticDiet", "http://schema.org/GlutenFreeDiet", "http://schema.org/HalalDiet", "http://schema.org/HinduDiet", "http://schema.org/KosherDiet", "http://schema.org/LowCalorieDiet", "http://schema.org/LowFatDiet", "http://schema.org/LowLactoseDiet", "http://schema.org/LowSaltDiet", "http://schema.org/VeganDiet", "http://schema.org/VegetarianDiet" ]
+      },
+      "QuantitativeValue" : {
+        "required" : [ "@type" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "QuantitativeValue" ]
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "The value of the quantitative value or property value node."
+          },
+          "unitCode" : {
+            "type" : "string",
+            "description" : "The unit of measurement as a UN/CEFACT Common Code or a URL. Codes other than the UN/CEFACT Common Code may be used with a prefix followed by a colon."
+          },
+          "maxValue" : {
+            "type" : "number",
+            "description" : "The upper value of some characteristic or property."
+          },
+          "minValue" : {
+            "type" : "number",
+            "description" : "The lower value of some characteristic or property."
+          }
+        }
+      },
+      "DeliveryTimeQuantitativeValue" : {
+        "required" : [ "@type", "unitCode", "value" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "QuantitativeValue" ]
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "The default deliverytime in minutes"
+          },
+          "unitCode" : {
+            "type" : "string",
+            "enum" : [ "MIN" ]
+          }
+        }
+      },
+      "AdvanceBookingTimeQuantitativeValue" : {
+        "required" : [ "@type", "maxValue", "minValue", "unitCode" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "QuantitativeValue" ]
+          },
+          "maxValue" : {
+            "type" : "number",
+            "description" : "Specifies the maximum time in minutes, when the order in advance could be fulfilled. For example, if an advance order is restricted from being fulfilled more than 2 days later"
+          },
+          "minValue" : {
+            "type" : "number",
+            "description" : "Specifies the minimum time in minutes, needed to fulfill an order in advance. For example, if an advance order needs at least 60 minutes to be delivered or to be ready for pickup"
+          },
+          "unitCode" : {
+            "type" : "string",
+            "enum" : [ "MIN" ]
+          }
+        }
+      },
+      "DayOfWeek" : {
+        "type" : "string",
+        "enum" : [ "Monday", "Tuesday", "Wedndesday", "Thursday", "Friday", "Satruday", "Sunday" ]
+      },
+      "AggregateRating" : {
+        "required" : [ "@type" ],
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "AggregateRating" ]
+          }
+        },
+        "description" : "Based on <a href=\"https://schema.org/AggregateRating\">schema.org/AggregateRating</a> If used as a property of a restaurant, it specifies the overall rating of this place based on a collection of reviews or ratings.\nIf used in the following offer types:\n    AddOnMenuItem.Offer\n    MenuItem.Offer\nthe overall rating of the related menuItem can be specified.\n"
+      },
+      "URL" : {
+        "type" : "string"
+      },
+      "ResponseRestaurant" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "number"
+          },
+          "restaurantId" : {
+            "type" : "string"
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/Restaurant"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "updateAt" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "partner" : {
+            "$ref" : "#/components/schemas/Partner"
+          }
+        }
+      },
+      "ResponseMenu" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "number"
+          },
+          "menuId" : {
+            "type" : "string"
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/Menu"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "updateAt" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "partner" : {
+            "$ref" : "#/components/schemas/Partner"
+          },
+          "restaurant" : {
+            "$ref" : "#/components/schemas/ResponseMenu_restaurant"
+          }
+        }
+      },
+      "ResponseService" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "number"
+          },
+          "serviceId" : {
+            "type" : "string"
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/Service"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "updateAt" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "partner" : {
+            "$ref" : "#/components/schemas/Partner"
+          }
+        }
+      },
+      "ResponseDeal" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "number"
+          },
+          "dealId" : {
+            "type" : "string"
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/Deal"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "updateAt" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "partner" : {
+            "$ref" : "#/components/schemas/Partner"
+          }
+        }
+      },
+      "Partner" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "number"
+          },
+          "partner" : {
+            "type" : "string"
+          },
+          "fulfillmentEndpoint" : {
+            "type" : "string"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "updateAt" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        }
+      },
+      "ErrorModel" : {
+        "required" : [ "code", "message" ],
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ReturnablePackageDepositDetails_returnablePackageDepositAmount" : {
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "enum" : [ "http://gs1.org/voc/PriceSpecification" ]
+          },
+          "http://gs1.org/voc/price" : {
+            "type" : "string",
+            "description" : "Price in common format. e.g. 0.50\n"
+          },
+          "http://gs1.org/voc/priceCurrency" : {
+            "type" : "string",
+            "description" : "EUR / USD / etc.\n"
+          }
+        },
+        "description" : "The amount of deposit for this item per <a href=\"https://www.gs1.org/voc/PriceSpecification\">gs1:PriceSpecification</a>. For example, 0.25 EUR deposit per can.\n",
+        "example" : null
+      },
+      "Restaurant_additionalProperty" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "The table type: e.g. \"imprint\"\n"
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "Additional information about the restaurant,\nsuch as legal name, legal address, and registration number.\nThis information can be formatted using \"\\n\".\n"
+          }
+        },
+        "example" : null
+      },
+      "ResponseMenu_restaurant" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "number"
+          },
+          "restaurantId" : {
+            "type" : "string"
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/Restaurant"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "updateAt" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        },
+        "example" : null
+      }
+    },
+    "requestBodies" : {
+      "Restaurant" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Restaurant"
+            }
+          }
+        },
+        "required" : true
+      },
+      "Menu" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Menu"
+            }
+          }
+        },
+        "required" : true
+      },
+      "Service" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Service"
+            }
+          }
+        },
+        "required" : true
+      },
+      "Deal" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Deal"
+            }
+          }
+        },
+        "required" : true
+      }
+    },
+    "securitySchemes" : {
+      "api_key" : {
+        "type" : "apiKey",
+        "name" : "key",
+        "in" : "query"
+      }
+    }
+  }
+}
