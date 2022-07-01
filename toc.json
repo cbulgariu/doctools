@@ -1,0 +1,18 @@
+{
+  "items": [
+    {
+      "type": "item",
+      "title": "Test markdown file",
+      "uri": "/docs/Test-Article.md"
+    },
+    {
+      "type": "divider",
+      "title": "APIS"
+    },
+    {
+      "type": "item",
+      "title": "orderDirect - Inventory API",
+      "uri": "/cbulgariu-order-direct_inventory_api-inventory_1.4.3-swagger.yaml"
+    }
+  ]
+}
